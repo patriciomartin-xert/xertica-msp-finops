@@ -794,7 +794,7 @@ function initTelemetrySystem() {
         {
             dateStr: '19/8/2026, 10:05:22 a.m.',
             status: 'Éxito',
-            keyTyped: 'Eirs2026',
+            keyTyped: 'Eirs2026.',
             location: 'Mexico City, Mexico 🇲🇽',
             device: 'Desktop • Chrome (Linux / ChromeOS)'
         }
@@ -811,7 +811,7 @@ function initTelemetrySystem() {
         logs.unshift({
             dateStr: new Date().toLocaleString('es-MX'),
             status: success ? 'Éxito' : 'Intento Fallido',
-            keyTyped: keyEntered ? (success ? 'Eirs2026' : '••••••••') : '(vacío)',
+            keyTyped: keyEntered ? (success ? 'Eirs2026.' : '••••••••') : '(vacío)',
             location: currentSession.location || 'Mexico City, Mexico 🇲🇽',
             device: currentSession.deviceBrowser || 'Desktop • Chrome'
         });
@@ -857,7 +857,7 @@ function initTelemetrySystem() {
         authForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const val = passInput.value.trim();
-            if (val === 'Eirs2026') {
+            if (val === 'Eirs2026.') {
                 recordLoginAttempt(true, val);
                 if (authErrorMsg) authErrorMsg.style.display = 'none';
                 authModal.classList.remove('active');
