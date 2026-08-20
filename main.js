@@ -181,6 +181,26 @@ function initHeroAnimations() {
             });
         });
     }
+
+    // Add interactive click animations to the orbit tech nodes
+    const techNodes = document.querySelectorAll('.tech-node');
+    techNodes.forEach(node => {
+        node.addEventListener('click', function() {
+            // Toggle active state class for color/glow change defined in CSS
+            this.classList.toggle('clicked');
+            
+            // GSAP bounce/wobble effect
+            gsap.fromTo(this, 
+                { scale: 0.8, rotationZ: -15 }, 
+                { 
+                    scale: 1, 
+                    rotationZ: 0, 
+                    duration: 1, 
+                    ease: "elastic.out(1.2, 0.3)" 
+                }
+            );
+        });
+    });
 }
 
 // --- 3. Scroll-Linked Orbital Satellites ---

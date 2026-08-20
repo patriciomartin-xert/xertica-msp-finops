@@ -320,10 +320,14 @@ h3 { font-size: 1.5rem; }
     transition: all 0.3s ease;
     white-space: nowrap;
     transform-style: preserve-3d;
+    cursor: pointer;
 }
 
 .tech-node:hover { border-color: var(--xe-yellow); box-shadow: 0 0 20px rgba(250, 243, 56, 0.3); color: var(--xe-yellow); }
-.tech-node span.material-symbols-outlined { color: var(--xe-yellow); }
+.tech-node:active { transform: scale(0.9); }
+.tech-node span.material-symbols-outlined { color: var(--xe-yellow); transition: transform 0.3s; }
+.tech-node.clicked { border-color: var(--xe-cyan); box-shadow: 0 0 30px rgba(24, 153, 175, 0.6); color: var(--xe-cyan); }
+.tech-node.clicked span.material-symbols-outlined { color: var(--xe-cyan); transform: rotate(360deg) scale(1.2); }
 
 .orbit-system {
     position: absolute;
