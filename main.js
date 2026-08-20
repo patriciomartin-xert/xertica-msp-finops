@@ -420,6 +420,51 @@ function initModal() {
         const submitBtn = form.querySelector('button[type="submit"]');
         const originalText = submitBtn.innerHTML;
         
+        // Extract Form Data for CRM
+        const leadName = document.getElementById('name')?.value.trim() || 'Prospecto';
+        const leadEmpresa = document.getElementById('empresa')?.value.trim() || 'Empresa Privada';
+        const leadCargo = document.getElementById('cargo')?.value.trim() || 'Ejecutivo TI';
+        const leadPaisCode = document.getElementById('pais')?.value || 'mx';
+        const leadTelefono = document.getElementById('telefono')?.value.trim() || '';
+        const leadEmail = document.getElementById('email')?.value.trim() || 'prospecto@empresa.com';
+
+        const countryMap = {
+            'co': 'Colombia 🇨🇴',
+            'mx': 'México 🇲🇽',
+            'pe': 'Perú 🇵🇪',
+            'cl': 'Chile 🇨🇱',
+            'ec': 'Ecuador 🇪🇨',
+            'ar': 'Argentina 🇦🇷',
+            'br': 'Brasil 🇧🇷'
+        };
+
+        const countryName = countryMap[leadPaisCode] || 'América Latina 🌐';
+
+        // Build Lead Object
+        const newLead = {
+            id: 'lead-' + Date.now(),
+            name: leadName,
+            empresa: leadEmpresa,
+            cargo: leadCargo,
+            pais: countryName,
+            telefono: leadTelefono,
+            email: leadEmail,
+            source: 'Formulario Assessment Landing',
+            status: 'Nuevo',
+            stage: 'Nuevos Leads',
+            estimatedValue: 18500,
+            dateStr: new Date().toLocaleString('es-MX'),
+            location: (typeof currentSession !== 'undefined' && currentSession.location) ? currentSession.location : countryName,
+            ipProvider: (typeof currentSession !== 'undefined' && currentSession.ipProvider) ? currentSession.ipProvider : 'Red Corporativa',
+            device: (typeof currentSession !== 'undefined' && currentSession.deviceBrowser) ? currentSession.deviceBrowser : 'Desktop • Chrome',
+            notes: ['Lead recibido a través del formulario de Assessment en la Landing Page.']
+        };
+
+        // Save to xertica_msp_leads
+        let existingLeads = JSON.parse(localStorage.getItem('xertica_msp_leads') || '[]');
+        existingLeads.unshift(newLead);
+        localStorage.setItem('xertica_msp_leads', JSON.stringify(existingLeads));
+
         submitBtn.innerHTML = '<span class="material-symbols-outlined spin">sync</span> Procesando...';
         submitBtn.style.opacity = '0.8';
         submitBtn.disabled = true;

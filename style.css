@@ -857,3 +857,254 @@ h3 { font-size: 1.5rem; }
     .floating-card { left: 10px; bottom: -20px; padding: 12px 20px; }
     .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
 }
+
+/* ==========================================================================
+   CRM & PORTAL DE PROSPECTOS STYLES
+   ========================================================================== */
+.crm-body {
+    background-color: #07070a;
+    color: #e2e8f0;
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+}
+
+.crm-navbar {
+    background: rgba(13, 13, 18, 0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    position: sticky; top: 0; z-index: 1000;
+    padding: 14px 24px;
+}
+
+.crm-nav-container {
+    max-width: 1400px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+}
+
+.crm-brand { display: flex; align-items: center; gap: 16px; }
+.crm-logo { height: 32px; width: auto; }
+.crm-brand-divider { width: 1px; height: 28px; background: rgba(255, 255, 255, 0.15); }
+
+.crm-title-group h1 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.15rem; font-weight: 700; color: #FFF; margin: 0;
+}
+
+.badge-live-pulse {
+    font-size: 0.72rem; color: #4ade80; font-weight: 600;
+    display: flex; align-items: center; gap: 6px; letter-spacing: 0.5px;
+}
+.pulse-dot {
+    width: 7px; height: 7px; background-color: #4ade80; border-radius: 50%;
+    animation: pulse 1.8s infinite;
+}
+
+.crm-nav-actions { display: flex; align-items: center; gap: 12px; }
+
+/* Main CRM Container */
+.crm-main-container {
+    max-width: 1400px; margin: 0 auto; padding: 28px 24px;
+}
+
+/* KPI Grid */
+.crm-kpi-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px; margin-bottom: 24px;
+}
+
+.kpi-card {
+    background: rgba(20, 20, 28, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px; padding: 20px;
+    display: flex; align-items: center; gap: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    transition: transform 0.2s, border-color 0.2s;
+}
+.kpi-card:hover {
+    transform: translateY(-2px); border-color: rgba(250, 243, 56, 0.3);
+}
+
+.kpi-icon { font-size: 32px; }
+.text-yellow { color: var(--xe-yellow); }
+.text-green { color: #4ade80; }
+.text-blue { color: #60a5fa; }
+.text-purple { color: #c084fc; }
+
+.kpi-content { display: flex; flex-direction: column; }
+.kpi-value { font-family: 'Outfit', sans-serif; font-size: 1.45rem; font-weight: 800; color: #FFF; }
+.kpi-label { font-size: 0.8rem; color: #94a3b8; font-weight: 500; }
+
+/* Toolbar & Filters */
+.crm-toolbar {
+    background: rgba(18, 18, 24, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px; padding: 16px; margin-bottom: 24px;
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px;
+}
+
+.toolbar-search-group { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; flex: 1; }
+
+.search-input-wrapper {
+    position: relative; flex: 1; min-width: 280px;
+}
+.search-input-wrapper input {
+    width: 100%; background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 10px;
+    padding: 10px 14px 10px 38px; color: #FFF; font-size: 0.88rem;
+}
+.search-input-wrapper input:focus {
+    outline: none; border-color: var(--xe-yellow);
+}
+.search-icon {
+    position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+    color: #64748b; font-size: 20px;
+}
+
+.select-filter-wrapper select {
+    background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px; padding: 10px 14px; color: #e2e8f0; font-size: 0.88rem;
+    cursor: pointer;
+}
+.select-filter-wrapper select:focus { outline: none; border-color: var(--xe-yellow); }
+
+.toolbar-actions { display: flex; align-items: center; gap: 12px; }
+
+.view-toggle-buttons {
+    display: flex; background: rgba(0,0,0,0.5);
+    border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 3px;
+}
+.btn-toggle {
+    background: transparent; border: none; color: #94a3b8; padding: 6px 12px;
+    border-radius: 8px; cursor: pointer; font-size: 0.82rem; font-weight: 600;
+    display: flex; align-items: center; gap: 6px; transition: all 0.2s;
+}
+.btn-toggle.active {
+    background: var(--xe-yellow); color: #000; font-weight: 700;
+}
+
+/* CRM Table */
+.crm-table { margin-top: 0; }
+.crm-table tr:hover { background: rgba(255, 255, 255, 0.03); }
+
+.btn-action-icon {
+    background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #e2e8f0; width: 34px; height: 34px; border-radius: 8px;
+    display: inline-flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: all 0.2s; text-decoration: none;
+}
+.btn-action-icon:hover {
+    background: rgba(250, 243, 56, 0.2); border-color: var(--xe-yellow); color: #FFF;
+}
+
+/* Kanban Board */
+.kanban-board-grid {
+    display: grid; grid-template-columns: repeat(5, minmax(240px, 1fr));
+    gap: 16px; overflow-x: auto; padding-bottom: 16px;
+}
+
+.kanban-column {
+    background: rgba(15, 15, 22, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px; padding: 14px; min-height: 500px;
+    display: flex; flex-direction: column;
+}
+
+.kanban-column-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-bottom: 12px; margin-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.col-title { font-size: 0.85rem; font-weight: 700; color: #FFF; display: flex; align-items: center; gap: 6px; }
+.col-count {
+    background: rgba(255, 255, 255, 0.1); color: #FFF;
+    font-size: 0.75rem; font-weight: 700; padding: 2px 8px; border-radius: 12px;
+}
+
+.col-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.dot-new { background-color: #60a5fa; }
+.dot-contact { background-color: #facc15; }
+.dot-assessment { background-color: #c084fc; }
+.dot-proposal { background-color: #fb923c; }
+.dot-won { background-color: #4ade80; }
+
+.kanban-cards-container { display: flex; flex-direction: column; gap: 10px; flex: 1; }
+.kanban-empty { font-size: 0.8rem; color: #64748b; text-align: center; padding: 30px 10px; border: 1px dashed rgba(255,255,255,0.08); border-radius: 10px; }
+
+.kanban-card {
+    background: rgba(25, 25, 35, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px; padding: 14px;
+    transition: transform 0.2s, border-color 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+.kanban-card:hover {
+    transform: translateY(-2px); border-color: rgba(250, 243, 56, 0.4);
+}
+
+.kanban-card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.kanban-card-company { font-weight: 700; color: var(--xe-yellow); font-size: 0.88rem; }
+.kanban-card-value { font-weight: 700; color: #4ade80; font-size: 0.82rem; }
+.kanban-card-name { font-size: 0.92rem; color: #FFF; margin: 0 0 4px 0; font-weight: 600; }
+.kanban-card-cargo { font-size: 0.78rem; color: #94a3b8; margin: 0 0 10px 0; }
+
+.kanban-card-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 8px; }
+.kanban-card-date { font-size: 0.72rem; color: #64748b; }
+
+.btn-kanban-view {
+    background: transparent; border: none; color: #60a5fa; font-size: 0.75rem; font-weight: 600;
+    cursor: pointer; display: flex; align-items: center; gap: 2px;
+}
+.btn-kanban-view:hover { color: var(--xe-yellow); }
+
+/* CRM Detail Modal & Drawer */
+.crm-detail-card { max-width: 580px; text-align: left; }
+
+.lead-action-bar { display: flex; gap: 10px; margin: 16px 0; }
+.btn-action-lead {
+    flex: 1; padding: 10px 14px; border-radius: 10px; font-weight: 600; font-size: 0.85rem;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    text-decoration: none; cursor: pointer; transition: all 0.2s;
+}
+.btn-wa { background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.4); }
+.btn-wa:hover { background: rgba(34, 197, 94, 0.35); }
+.btn-mail { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); }
+.btn-mail:hover { background: rgba(59, 130, 246, 0.35); }
+
+.detail-stage-box {
+    background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px; padding: 12px 14px; margin-bottom: 16px;
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+}
+.detail-stage-box label { font-size: 0.82rem; color: #ccc; font-weight: 600; }
+.lead-stage-dropdown {
+    background: #111; border: 1px solid rgba(250, 243, 56, 0.3); border-radius: 8px;
+    color: #FFF; padding: 6px 12px; font-size: 0.85rem; cursor: pointer; font-weight: 600;
+}
+
+.crm-notes-list {
+    list-style: none; padding: 0; margin: 10px 0 16px 0; max-height: 140px; overflow-y: auto;
+}
+.crm-notes-list li {
+    background: rgba(255,255,255,0.04); border-left: 3px solid var(--xe-yellow);
+    padding: 8px 12px; border-radius: 4px; margin-bottom: 6px; font-size: 0.82rem; color: #ddd;
+}
+
+.add-note-form { display: flex; gap: 8px; }
+.add-note-form input {
+    flex: 1; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px; padding: 8px 12px; color: #FFF; font-size: 0.85rem;
+}
+.add-note-form input:focus { outline: none; border-color: var(--xe-yellow); }
+
+.btn-yellow-dash-sm {
+    background: var(--xe-yellow); color: #000; font-weight: 700; border: none;
+    border-radius: 8px; padding: 8px 12px; cursor: pointer; font-size: 0.8rem;
+    display: inline-flex; align-items: center; gap: 4px;
+}
+
+/* New Lead Modal */
+.crm-new-card { max-width: 520px; text-align: left; }
+.form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.select-input-wrapper select {
+    width: 100%; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px; padding: 14px; color: #FFF; font-size: 0.95rem; cursor: pointer;
+}
