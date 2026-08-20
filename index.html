@@ -268,10 +268,25 @@
                 <span class="material-symbols-outlined">key</span>
             </div>
             <h3 class="auth-title">Acceso de Administrador</h3>
-            <p class="auth-sub">Ingresa la clave de seguridad para ver la telemetría en vivo.</p>
+            <p class="auth-sub">Rellena con un perfil rápido o ingresa tus datos.</p>
+
+            <!-- Quick Auto-Fill Chips -->
+            <div class="preset-chips-wrapper">
+                <button type="button" class="chip-btn" id="presetAdminBtn">👤 Admin (Patricio)</button>
+                <button type="button" class="chip-btn" id="presetClientBtn">🏢 Cliente / Prospecto</button>
+            </div>
+
             <form id="adminAuthForm">
+                <div class="auth-input-wrapper" style="margin-bottom: 10px;">
+                    <input type="text" id="adminAuthNameInput" placeholder="Nombre de usuario" value="Patricio Martin">
+                    <span class="material-symbols-outlined pass-icon">person</span>
+                </div>
+                <div class="auth-input-wrapper" style="margin-bottom: 10px;">
+                    <input type="email" id="adminAuthEmailInput" placeholder="Correo / Empresa" value="patricio.martin@xertica.com">
+                    <span class="material-symbols-outlined pass-icon">mail</span>
+                </div>
                 <div class="auth-input-wrapper">
-                    <input type="password" id="adminPasswordInput" placeholder="Contraseña de acceso" required autofocus>
+                    <input type="password" id="adminPasswordInput" placeholder="Contraseña de acceso" required>
                     <span class="material-symbols-outlined pass-icon">lock</span>
                 </div>
                 <p id="authErrorMsg" class="auth-error-msg" style="display:none;">Contraseña incorrecta. Inténtalo de nuevo.</p>
@@ -284,75 +299,79 @@
 
     <!-- Telemetry Dashboard Modal -->
     <div id="telemetryModal" class="telemetry-modal-overlay">
-        <div class="telemetry-dashboard-container">
-            <!-- Header -->
+        <div class="telemetry-dashboard-card">
+            <!-- Modal Header -->
             <div class="telemetry-header">
-                <div class="header-left">
-                    <div class="dash-icon-wrapper">
-                        <span class="material-symbols-outlined">analytics</span>
-                    </div>
+                <div class="telemetry-title-group">
+                    <span class="material-symbols-outlined icon-yellow">analytics</span>
                     <div>
-                        <div class="dash-title-row">
-                            <h2>Dashboard de Usabilidad & Analítica de Experiencia</h2>
-                            <span class="live-badge"><span class="dot"></span> EN VIVO</span>
-                        </div>
-                        <p class="dash-subtitle">Telemetría en tiempo real: tiempo de permanencia, geolocalización, dispositivos y recorrido en el portafolio</p>
+                        <h2>Panel de Telemetría & Actividad en Vivo</h2>
+                        <p>Monitoreo en tiempo real de interacciones, ubicaciones y comportamiento de usuarios</p>
                     </div>
                 </div>
-                <div class="header-actions">
-                    <button id="refreshTelemetryBtn" class="btn-icon-dash" title="Actualizar Datos"><span class="material-symbols-outlined">refresh</span></button>
-                    <button id="exportCsvBtn" class="btn-yellow-dash"><span class="material-symbols-outlined">download</span> Exportar Telemetría CSV</button>
+                <div class="telemetry-controls">
+                    <span class="badge-live-pulse"><span class="pulse-dot"></span> EN VIVO</span>
                     <button id="closeTelemetryBtn" class="close-modal-dash"><span class="material-symbols-outlined">close</span></button>
                 </div>
             </div>
 
-            <!-- Top Stat Cards -->
-            <div class="telemetry-stats-grid">
-                <div class="tele-card">
-                    <div class="tele-card-header">
-                        <span>TOTAL SESIONES / VISITAS</span>
-                        <span class="material-symbols-outlined icon-yellow">group</span>
+            <!-- KPI Cards Grid -->
+            <div class="telemetry-kpi-grid">
+                <div class="kpi-card">
+                    <span class="material-symbols-outlined kpi-icon text-green">groups</span>
+                    <div class="kpi-content">
+                        <span class="kpi-value" id="kpiTotalVisits">0</span>
+                        <span class="kpi-label">Sesiones Totales Capturadas</span>
                     </div>
-                    <div class="tele-card-value" id="statTotalVisits">17</div>
-                    <div class="tele-card-sub" id="statUniqueUsers">4 Usuarios Únicos</div>
                 </div>
 
-                <div class="tele-card">
-                    <div class="tele-card-header">
-                        <span>PERMANENCIA PROMEDIO</span>
-                        <span class="material-symbols-outlined icon-blue">timer</span>
+                <div class="kpi-card">
+                    <span class="material-symbols-outlined kpi-icon text-yellow">public</span>
+                    <div class="kpi-content">
+                        <span class="kpi-value" id="kpiActiveUsers">1</span>
+                        <span class="kpi-label">Usuarios Activos en este momento</span>
                     </div>
-                    <div class="tele-card-value" id="statAvgTime">12m 41s</div>
-                    <div class="tele-card-sub">Tiempo activo en la app</div>
                 </div>
 
-                <div class="tele-card">
-                    <div class="tele-card-header">
-                        <span>TOP UBICACIÓN</span>
-                        <span class="material-symbols-outlined icon-green">public</span>
+                <div class="kpi-card">
+                    <span class="material-symbols-outlined kpi-icon text-blue">ads_click</span>
+                    <div class="kpi-content">
+                        <span class="kpi-value" id="kpiTotalInteractions">0</span>
+                        <span class="kpi-label">Interacciones / Clics Registrados</span>
                     </div>
-                    <div class="tele-card-value text-green" id="statTopLocation">Mexico 🇲🇽</div>
-                    <div class="tele-card-sub" id="statTopCity">Mexico City</div>
                 </div>
 
-                <div class="tele-card">
-                    <div class="tele-card-header">
-                        <span>DISPOSITIVOS / SO</span>
-                        <span class="material-symbols-outlined icon-pink">devices</span>
+                <div class="kpi-card">
+                    <span class="material-symbols-outlined kpi-icon text-purple">psychology</span>
+                    <div class="kpi-content">
+                        <span class="kpi-value" id="kpiTopUseCase">Advisory</span>
+                        <span class="kpi-label">Pilar Más Consultado</span>
                     </div>
-                    <div class="tele-card-value text-pink" id="statTopDevice">Desktop</div>
-                    <div class="tele-card-sub" id="statTopBrowser">Chrome / Linux</div>
                 </div>
             </div>
 
-            <!-- Progress Bar -->
-            <div class="telemetry-progress-box">
-                <div class="progress-label">
-                    <span>PARTICIPACIÓN POR ETAPA DEL PORTAFOLIO</span>
-                    <span class="stages-hint">Enablement • Advisory • Factory • Support</span>
+            <!-- Funnel / Stage Bar -->
+            <div class="telemetry-funnel-box">
+                <div class="funnel-title">
+                    <span class="material-symbols-outlined icon-yellow">filter_alt</span>
+                    <strong>Embudo de Interacción MSP (Advisory ➔ Factory ➔ Support)</strong>
                 </div>
-                <div class="progress-bar-bg">
-                    <div class="progress-bar-fill" style="width: 100%;"></div>
+                <div class="funnel-bars">
+                    <div class="funnel-step">
+                        <span class="step-name">1. Advisory (Calculadora / ROI)</span>
+                        <div class="progress-bg"><div class="progress-fill fill-advisory" id="barAdvisory" style="width: 0%;"></div></div>
+                        <span class="step-count" id="countAdvisory">0</span>
+                    </div>
+                    <div class="funnel-step">
+                        <span class="step-name">2. Factory (Pilares 3D)</span>
+                        <div class="progress-bg"><div class="progress-fill fill-factory" id="barFactory" style="width: 0%;"></div></div>
+                        <span class="step-count" id="countFactory">0</span>
+                    </div>
+                    <div class="funnel-step">
+                        <span class="step-name">3. Support (Solicitudes / Assessment)</span>
+                        <div class="progress-bg"><div class="progress-fill fill-support" id="barSupport" style="width: 0%;"></div></div>
+                        <span class="step-count" id="countSupport">0</span>
+                    </div>
                 </div>
             </div>
 
@@ -367,6 +386,7 @@
                         <thead>
                             <tr>
                                 <th>FECHA Y HORA</th>
+                                <th>USUARIO / CORREO</th>
                                 <th>ESTADO</th>
                                 <th>CLAVE INGRESADA</th>
                                 <th>UBICACIÓN / IP</th>
@@ -399,10 +419,10 @@
                             <th>USUARIO / CORREO</th>
                             <th>DÍA Y HORA</th>
                             <th>UBICACIÓN</th>
-                            <th>PERMANENCIA</th>
-                            <th>DISPOSITIVO / SO</th>
-                            <th>ETAPAS CONSULTADAS</th>
+                            <th>DISPOSITIVO</th>
+                            <th>TIEMPO</th>
                             <th>ACCIONES</th>
+                            <th>ESTADO</th>
                         </tr>
                     </thead>
                     <tbody id="telemetryTableBody">
@@ -453,8 +473,9 @@
             </div>
             
             <h3 id="adminLoginDetailStatus" class="detail-user-title" style="margin-top: 20px;">Acceso Concedido</h3>
-            
-            <div class="detail-info-box" style="margin-top: 30px;">
+            <p id="adminLoginDetailUser" class="detail-user-email" style="font-weight: 600; color: #FFF; font-size: 1.05rem; margin-top: 6px;"></p>
+
+            <div class="detail-info-box" style="margin-top: 24px;">
                 <p><span class="material-symbols-outlined icon-small">calendar_month</span> <strong>FECHA Y HORA:</strong> <span id="adminLoginDetailDate"></span></p>
                 <p><span class="material-symbols-outlined icon-small">password</span> <strong>CLAVE INGRESADA:</strong> <span id="adminLoginDetailKey"></span></p>
                 <p><span class="material-symbols-outlined icon-small">push_pin</span> <strong>UBICACIÓN GEOGRÁFICA:</strong> <span id="adminLoginDetailGeoLoc"></span></p>

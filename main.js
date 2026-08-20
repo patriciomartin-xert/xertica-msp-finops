@@ -745,11 +745,9 @@ function initTelemetrySystem() {
 
     if (clearHistoryBtn) {
         clearHistoryBtn.addEventListener('click', () => {
-            if (confirm('¿Deseas limpiar todo el historial de telemetría y registros de ingresos?')) {
+            if (confirm('¿Deseas limpiar el historial de telemetría registrado?')) {
                 localStorage.setItem('xertica_telemetry_sessions', JSON.stringify([currentSession]));
-                localStorage.setItem('xertica_admin_login_logs', JSON.stringify([]));
                 renderDashboard();
-                renderAdminLoginLogs();
             }
         });
     }
@@ -795,6 +793,8 @@ function initTelemetrySystem() {
     const initialLoginLogs = [
         {
             dateStr: '19/8/2026, 10:05:22 a.m.',
+            userName: 'Patricio Martin',
+            userEmail: 'patricio.martin@xertica.com',
             status: 'Éxito',
             keyTyped: 'Eirs2026.',
             location: 'Mexico City, Mexico 🇲🇽',
@@ -809,10 +809,12 @@ function initTelemetrySystem() {
         localStorage.setItem('xertica_admin_login_logs', JSON.stringify(adminLoginLogs));
     }
 
-    function recordLoginAttempt(success, keyEntered) {
+    function recordLoginAttempt(success, keyEntered, uName, uEmail) {
         let logs = JSON.parse(localStorage.getItem('xertica_admin_login_logs') || '[]');
         logs.unshift({
             dateStr: new Date().toLocaleString('es-MX'),
+            userName: uName || 'Patricio Martin',
+            userEmail: uEmail || 'patricio.martin@xertica.com',
             status: success ? 'Éxito' : 'Intento Fallido',
             keyTyped: keyEntered ? (success ? 'Eirs2026.' : '••••••••') : '(vacío)',
             location: currentSession.location || 'Mexico City, Mexico 🇲🇽',
@@ -842,6 +844,7 @@ function initTelemetrySystem() {
 
             tr.innerHTML = `
                 <td>${log.dateStr}</td>
+                <td><strong>${log.userName || 'Patricio Martin'}</strong><br><span style="font-size: 0.85em; color: rgba(255,255,255,0.5);">${log.userEmail || 'patricio.martin@xertica.com'}</span></td>
                 <td><span class="${badgeClass}" style="${badgeStyle}">${isSuccess ? '✅ Acceso Concedido' : '❌ Clave Incorrecta'}</span></td>
                 <td><code>${log.keyTyped}</code></td>
                 <td>${log.location}<br><span style="font-size: 0.85em; color: rgba(255,255,255,0.5);">${log.ipProvider || 'Desconocido'}</span></td>
@@ -861,6 +864,8 @@ function initTelemetrySystem() {
                 if (detailModal) {
                     document.getElementById('adminLoginDetailStatus').innerHTML = isSuccess ? '✅ Acceso Concedido' : '❌ Intento Fallido';
                     document.getElementById('adminLoginDetailStatus').style.color = isSuccess ? '#4ade80' : '#f87171';
+                    const userElem = document.getElementById('adminLoginDetailUser');
+                    if (userElem) userElem.textContent = `${log.userName || 'Patricio Martin'} (${log.userEmail || 'patricio.martin@xertica.com'})`;
                     document.getElementById('adminLoginDetailDate').textContent = log.dateStr;
                     document.getElementById('adminLoginDetailKey').textContent = log.keyTyped;
                     document.getElementById('adminLoginDetailGeoLoc').textContent = log.location;
@@ -900,18 +905,45 @@ function initTelemetrySystem() {
         });
     }
 
+    const presetAdminBtn = document.getElementById('presetAdminBtn');
+    const presetClientBtn = document.getElementById('presetClientBtn');
+    const authNameInput = document.getElementById('adminAuthNameInput');
+    const authEmailInput = document.getElementById('adminAuthEmailInput');
+
+    if (presetAdminBtn) {
+        presetAdminBtn.addEventListener('click', () => {
+            if (authNameInput) authNameInput.value = 'Patricio Martin';
+            if (authEmailInput) authEmailInput.value = 'patricio.martin@xertica.com';
+            if (passInput) passInput.value = 'Eirs2026.';
+        });
+    }
+    if (presetClientBtn) {
+        presetClientBtn.addEventListener('click', () => {
+            if (authNameInput) authNameInput.value = 'Cliente Demo';
+            if (authEmailInput) authEmailInput.value = 'prospecto@empresa.com';
+            if (passInput) passInput.value = 'Eirs2026.';
+        });
+    }
+
     if (authForm) {
         authForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const val = passInput.value.trim();
+            const uName = authNameInput ? authNameInput.value.trim() : 'Patricio Martin';
+            const uEmail = authEmailInput ? authEmailInput.value.trim() : 'patricio.martin@xertica.com';
+
             if (val === 'Eirs2026.') {
-                recordLoginAttempt(true, val);
+                recordLoginAttempt(true, val, uName, uEmail);
+                if (currentSession) {
+                    currentSession.userName = uName || 'Sesión Actual';
+                    currentSession.userEmail = uEmail || 'visitante@xertica.com';
+                }
                 if (authErrorMsg) authErrorMsg.style.display = 'none';
                 authModal.classList.remove('active');
                 teleModal.classList.add('active');
                 renderDashboard();
             } else {
-                recordLoginAttempt(false, val);
+                recordLoginAttempt(false, val, uName, uEmail);
                 if (authErrorMsg) authErrorMsg.style.display = 'block';
                 if (passInput) {
                     passInput.style.borderColor = '#ef4444';
