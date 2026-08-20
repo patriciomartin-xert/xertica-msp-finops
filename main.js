@@ -796,6 +796,7 @@ function initTelemetrySystem() {
             status: 'Éxito',
             keyTyped: 'Eirs2026.',
             location: 'Mexico City, Mexico 🇲🇽',
+            ipProvider: 'Xertica Cloud Inc.',
             device: 'Desktop • Chrome (Linux / ChromeOS)'
         }
     ];
@@ -813,6 +814,7 @@ function initTelemetrySystem() {
             status: success ? 'Éxito' : 'Intento Fallido',
             keyTyped: keyEntered ? (success ? 'Eirs2026.' : '••••••••') : '(vacío)',
             location: currentSession.location || 'Mexico City, Mexico 🇲🇽',
+            ipProvider: currentSession.ipProvider || 'Desconocido / ISP Privado',
             device: currentSession.deviceBrowser || 'Desktop • Chrome'
         });
         localStorage.setItem('xertica_admin_login_logs', JSON.stringify(logs));
@@ -840,7 +842,7 @@ function initTelemetrySystem() {
                 <td>${log.dateStr}</td>
                 <td><span class="${badgeClass}" style="${badgeStyle}">${isSuccess ? '✅ Acceso Concedido' : '❌ Clave Incorrecta'}</span></td>
                 <td><code>${log.keyTyped}</code></td>
-                <td>${log.location}</td>
+                <td>${log.location}<br><span style="font-size: 0.85em; color: rgba(255,255,255,0.5);">${log.ipProvider || 'Desconocido'}</span></td>
                 <td>${log.device}</td>
                 <td style="text-align:center;">
                     <button class="btn-delete-log" data-index="${index}" style="background: none; border: none; color: #ef4444; cursor: pointer;" title="Eliminar este ingreso">
