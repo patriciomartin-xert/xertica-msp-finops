@@ -213,63 +213,84 @@ function initHeroAnimations() {
     function triggerEasterEggExplosion() {
         const tl = gsap.timeline();
         
-        // 1. Shake and charge up
+        // 1. Black Hole Implosion (Charge Up)
         tl.to(".xertica-main-symbol", {
-            duration: 0.1,
-            x: "random(-15, 15)",
-            y: "random(-15, 15)",
-            rotation: "random(-10, 10)",
-            filter: "brightness(3) drop-shadow(0 0 60px rgba(250, 243, 56, 1))",
-            repeat: 7,
-            yoyo: true,
-            ease: "none"
+            duration: 1.5,
+            scale: 0.1,
+            rotation: 1440,
+            filter: "brightness(5) hue-rotate(90deg) drop-shadow(0 0 100px rgba(0, 255, 255, 1))",
+            ease: "power4.in"
         })
-        // 2. BOOM! Explode the main symbol
-        .to(".xertica-main-symbol", {
-            duration: 0.6,
-            scale: 6,
-            opacity: 0,
-            rotation: 1080,
-            filter: "brightness(10) blur(30px)",
-            ease: "expo.in"
-        })
-        // 3. Explode the rings outward
         .to(".glow-ring", {
+            duration: 1.2,
+            scale: 0,
+            opacity: 1,
+            rotation: -720,
+            ease: "power4.in"
+        }, "-=1.5")
+        .to(".orbit-node", {
+            duration: 1,
+            scale: 0.2,
+            x: 0,
+            y: 0,
+            z: 0,
+            rotationX: 360,
+            rotationY: 360,
+            opacity: 0,
+            ease: "power3.in"
+        }, "-=1.2")
+        
+        // 2. SUPERNOVA EXPLOSION!
+        .to(".xertica-main-symbol", {
             duration: 0.8,
-            scale: 4,
+            scale: 25,
+            opacity: 0,
+            rotation: 2880,
+            filter: "brightness(20) contrast(5) hue-rotate(360deg) blur(20px)",
+            ease: "expo.out"
+        })
+        .to(".glow-ring", {
+            duration: 1,
+            scale: 8,
             opacity: 0,
             stagger: 0.1,
+            borderWidth: "10px",
+            filter: "brightness(5)",
             ease: "power2.out"
-        }, "-=0.6")
-        // 4. Scatter the tech nodes in 3D space
-        .to(".orbit-node", {
-            duration: 1.2,
-            x: "random(-1000, 1000)",
-            y: "random(-1000, 1000)",
-            z: "random(-800, 800)",
-            rotationX: "random(-720, 720)",
-            rotationY: "random(-720, 720)",
-            opacity: 0,
-            ease: "power3.out"
         }, "-=0.8")
-        // 5. Calm down, then Rebirth (fade back in)
+        .to(".orbit-node", {
+            duration: 1.5,
+            scale: 2,
+            x: "random(-1500, 1500)",
+            y: "random(-1500, 1500)",
+            z: "random(-1000, 1000)",
+            rotationX: "random(-1440, 1440)",
+            rotationY: "random(-1440, 1440)",
+            rotationZ: "random(-1440, 1440)",
+            opacity: 0,
+            ease: "expo.out"
+        }, "-=0.8")
+
+        // 3. Calm down, then Rebirth (fade back in)
         .to([".xertica-main-symbol", ".glow-ring", ".orbit-node"], {
-            duration: 2.5,
+            duration: 3,
             scale: 1,
             opacity: 1,
+            autoAlpha: 1,
             x: 0,
             y: 0,
             z: 0,
             rotation: 0,
             rotationX: 0,
             rotationY: 0,
-            filter: "brightness(1) blur(0px) drop-shadow(0 0 30px rgba(250, 243, 56, 0.4))",
-            ease: "power2.inOut",
+            rotationZ: 0,
+            filter: "brightness(1) blur(0px) hue-rotate(0deg) drop-shadow(0 0 30px rgba(250, 243, 56, 0.4))",
+            ease: "power3.inOut",
             onComplete: () => {
                 // Remove clicked classes
                 techNodes.forEach(n => n.classList.remove('clicked'));
-                // Clear inline GSAP styles to restore pure CSS control for orbits
-                gsap.set(".orbit-node", { clearProps: "all" });
+                // Clear inline GSAP styles but PRESERVE visibility/opacity to avoid gs-float bugs
+                gsap.set(".orbit-node", { clearProps: "transform,filter" });
                 gsap.set(".xertica-main-symbol", { clearProps: "all" });
                 gsap.set(".glow-ring", { clearProps: "all" });
                 isExploded = false;
