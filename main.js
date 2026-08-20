@@ -745,9 +745,11 @@ function initTelemetrySystem() {
 
     if (clearHistoryBtn) {
         clearHistoryBtn.addEventListener('click', () => {
-            if (confirm('¿Deseas limpiar el historial de telemetría registrado?')) {
+            if (confirm('¿Deseas limpiar todo el historial de telemetría y registros de ingresos?')) {
                 localStorage.setItem('xertica_telemetry_sessions', JSON.stringify([currentSession]));
+                localStorage.setItem('xertica_admin_login_logs', JSON.stringify([]));
                 renderDashboard();
+                renderAdminLoginLogs();
             }
         });
     }
