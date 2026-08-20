@@ -146,24 +146,19 @@ function initHeroAnimations() {
         "-=0.5"
     )
     .fromTo(".gs-float-1",
-        { scale: 0, opacity: 0 },
-        { duration: 0.6, scale: 1, opacity: 1, ease: "back.out(1.5)" },
+        { scale: 0, autoAlpha: 0 },
+        { duration: 0.6, scale: 1, autoAlpha: 1, ease: "back.out(1.5)" },
         "-=1"
     )
     .fromTo(".gs-float-2",
-        { scale: 0, opacity: 0 },
-        { duration: 0.6, scale: 1, opacity: 1, ease: "back.out(1.5)" },
+        { scale: 0, autoAlpha: 0 },
+        { duration: 0.6, scale: 1, autoAlpha: 1, ease: "back.out(1.5)" },
         "-=0.8"
     )
     .fromTo(".gs-float-3",
-        { scale: 0, opacity: 0 },
-        { duration: 0.6, scale: 1, opacity: 1, ease: "back.out(1.5)" },
+        { scale: 0, autoAlpha: 0 },
+        { duration: 0.6, scale: 1, autoAlpha: 1, ease: "back.out(1.5)" },
         "-=0.6"
-    )
-    .fromTo(".gs-float-4",
-        { scale: 0, opacity: 0 },
-        { duration: 0.6, scale: 1, opacity: 1, ease: "back.out(1.5)" },
-        "-=0.4"
     );
 
     // Continuous 3D tilt effects based on mouse movement for the symbol container
