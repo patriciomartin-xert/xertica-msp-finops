@@ -351,19 +351,16 @@ h3 { font-size: 1.5rem; }
 }
 
 .node-a { transform: translate(-50%, -50%) rotateY(0deg) translateZ(320px); }
-.node-b { transform: translate(-50%, -50%) rotateY(90deg) translateZ(320px); }
-.node-c { transform: translate(-50%, -50%) rotateY(180deg) translateZ(320px); }
-.node-d { transform: translate(-50%, -50%) rotateY(270deg) translateZ(320px); }
+.node-b { transform: translate(-50%, -50%) rotateY(120deg) translateZ(320px); }
+.node-c { transform: translate(-50%, -50%) rotateY(240deg) translateZ(320px); }
 
 .node-a .tech-node { animation: counter-orbit-a 12s linear infinite; }
 .node-b .tech-node { animation: counter-orbit-b 12s linear infinite; }
 .node-c .tech-node { animation: counter-orbit-c 12s linear infinite; }
-.node-d .tech-node { animation: counter-orbit-d 12s linear infinite; }
 
 @keyframes counter-orbit-a { from { transform: rotateY(0deg); } to { transform: rotateY(-360deg); } }
-@keyframes counter-orbit-b { from { transform: rotateY(-90deg); } to { transform: rotateY(-450deg); } }
-@keyframes counter-orbit-c { from { transform: rotateY(-180deg); } to { transform: rotateY(-540deg); } }
-@keyframes counter-orbit-d { from { transform: rotateY(-270deg); } to { transform: rotateY(-630deg); } }
+@keyframes counter-orbit-b { from { transform: rotateY(-120deg); } to { transform: rotateY(-480deg); } }
+@keyframes counter-orbit-c { from { transform: rotateY(-240deg); } to { transform: rotateY(-600deg); } }
 
 
 /* Orbital Satellites Section */
