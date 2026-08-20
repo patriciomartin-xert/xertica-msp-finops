@@ -366,12 +366,11 @@ h3 { font-size: 1.5rem; }
 .orbital-section-wrapper {
     position: relative;
     width: 100%;
-    height: 55vh; /* Reduced height significantly to avoid empty space below */
+    height: 100vh; /* Fill viewport so it centers perfectly when pinned by GSAP */
     display: flex;
     align-items: center;
     justify-content: center;
     perspective: 1200px;
-    margin-top: -80px; /* Pull the section up closer to the hero */
 }
 
 .satellites-orbit {
@@ -408,8 +407,8 @@ h3 { font-size: 1.5rem; }
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 700px; /* Diameter matching 2x translateZ(350px) */
-    height: 700px;
+    width: 800px; /* Diameter matching 2x translateZ(400px) */
+    height: 800px;
     border-radius: 50%;
     border: 1.5px dashed rgba(196, 91, 170, 0.35);
     box-shadow: 0 0 30px rgba(196, 91, 170, 0.2), inset 0 0 30px rgba(196, 91, 170, 0.15);
@@ -428,10 +427,10 @@ h3 { font-size: 1.5rem; }
 }
 
 /* Base transforms applied via CSS to establish the circle, JS might adjust these for responsiveness */
-.sat-1 { transform: translate(-50%, -50%) rotateY(0deg) translateZ(350px); }
-.sat-2 { transform: translate(-50%, -50%) rotateY(90deg) translateZ(350px); }
-.sat-3 { transform: translate(-50%, -50%) rotateY(180deg) translateZ(350px); }
-.sat-4 { transform: translate(-50%, -50%) rotateY(270deg) translateZ(350px); }
+.sat-1 { transform: translate(-50%, -50%) rotateY(0deg) translateZ(400px); }
+.sat-2 { transform: translate(-50%, -50%) rotateY(90deg) translateZ(400px); }
+.sat-3 { transform: translate(-50%, -50%) rotateY(180deg) translateZ(400px); }
+.sat-4 { transform: translate(-50%, -50%) rotateY(270deg) translateZ(400px); }
 
 .sat-content-wrapper {
     position: relative;
