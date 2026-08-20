@@ -845,22 +845,50 @@ function initTelemetrySystem() {
                 <td>${log.location}<br><span style="font-size: 0.85em; color: rgba(255,255,255,0.5);">${log.ipProvider || 'Desconocido'}</span></td>
                 <td>${log.device}</td>
                 <td style="text-align:center;">
-                    <button class="btn-delete-log" data-index="${index}" style="background: none; border: none; color: #ef4444; cursor: pointer;" title="Eliminar este ingreso">
+                    <button class="btn-delete-log" data-index="${index}" style="background: none; border: none; color: #ef4444; cursor: pointer; padding: 5px; z-index: 10;" title="Eliminar este ingreso">
                         <span class="material-symbols-outlined" style="font-size: 20px;">delete</span>
                     </button>
                 </td>
             `;
+            
+            tr.style.cursor = 'pointer';
+            tr.addEventListener('click', (e) => {
+                if (e.target.closest('.btn-delete-log')) return; // Ignore if delete button is clicked
+                
+                const detailModal = document.getElementById('adminLoginDetailModal');
+                if (detailModal) {
+                    document.getElementById('adminLoginDetailStatus').innerHTML = isSuccess ? '✅ Acceso Concedido' : '❌ Intento Fallido';
+                    document.getElementById('adminLoginDetailStatus').style.color = isSuccess ? '#4ade80' : '#f87171';
+                    document.getElementById('adminLoginDetailDate').textContent = log.dateStr;
+                    document.getElementById('adminLoginDetailKey').textContent = log.keyTyped;
+                    document.getElementById('adminLoginDetailGeoLoc').textContent = log.location;
+                    document.getElementById('adminLoginDetailIp').textContent = log.ipProvider || 'Desconocido';
+                    document.getElementById('adminLoginDetailDevice').textContent = log.device;
+                    
+                    detailModal.classList.add('active');
+                }
+            });
+
             loginsTableBody.appendChild(tr);
         });
 
         // Add event listeners for delete buttons
         document.querySelectorAll('.btn-delete-log').forEach(btn => {
             btn.addEventListener('click', (e) => {
+                e.stopPropagation();
                 const idx = e.currentTarget.getAttribute('data-index');
                 logs.splice(idx, 1);
                 localStorage.setItem('xertica_admin_login_logs', JSON.stringify(logs));
                 renderAdminLoginLogs();
             });
+        });
+    }
+
+    const closeAdminLoginDetailBtn = document.getElementById('closeAdminLoginDetailBtn');
+    if (closeAdminLoginDetailBtn) {
+        closeAdminLoginDetailBtn.addEventListener('click', () => {
+            const detailModal = document.getElementById('adminLoginDetailModal');
+            if (detailModal) detailModal.classList.remove('active');
         });
     }
 
