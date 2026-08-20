@@ -1,0 +1,7 @@
+{
+  "name": "xertica-finops",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "mkdir -p public_html && cp index.html main.js style.css xertica-symbol.png public_html/ && cp -r public public_html/ || true"
+  }
+}
