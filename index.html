@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xertica.ai | Optimización MSP FinOps</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <!-- GSAP for Advanced Animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/MotionPathPlugin.min.js"></script>
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css?v=20260820_v4">
+    <!-- Scripts -->
+    <script type="module" src="main.js?v=20260820_v4" defer></script>
+</head>
+<body class="dark-theme">
+    <!-- Interactive Canvas Background -->
+    <canvas id="heroCanvas" class="hero-canvas"></canvas>
+
+    <!-- Sticky Header -->
+    <header class="sticky-header">
+        <div class="container header-container">
+            <img src="public/logo-white.png" alt="Xertica.ai Logo" class="brand-logo">
+            <nav class="header-nav">
+                <a href="#assessment" class="btn-outline-neon" id="headerAssessmentBtn">Solicitar Assessment</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <main>
+        <section class="hero-section">
+            <div class="hero-bg-grid"></div>
+            <div class="container dual-column">
+                
+                <!-- Left Content -->
+                <div class="hero-content">
+                    <div class="badge-neon gs-reveal">OFERTA ENTERPRISE 2026</div>
+                    <h1 class="hero-title">
+                        <span class="text-blur-reveal">Podemos ahorrar el</span><br>
+                        <span class="super-impact-number text-blur-reveal"><span id="hero-savings-counter">0</span>%</span> <span class="text-blur-reveal">de tu consumo en</span> <span class="highlight-blue text-blur-reveal">GCP</span>
+                    </h1>
+                    <p class="hero-description gs-reveal">
+                        Nuestro servicio <strong>MSP FinOps Estratégico</strong> transforma costos variables en predictibilidad financiera. Ya hemos logrado que clientes ahorren el equivalente a <strong>$500,000 USD anuales</strong> optimizando proactivamente su arquitectura en la nube.
+                    </p>
+                    <div class="hero-actions gs-reveal">
+                        <button class="btn-primary-yellow" id="assessmentBtn">
+                            <span class="material-symbols-outlined">analytics</span>
+                            Agendar Assessment Gratuito
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right Content (Innovative Xertica Hero Visual) -->
+                <div class="hero-visual xertica-innovative-visual">
+                    <div class="xertica-symbol-container gs-symbol-reveal">
+                        <!-- Holographic/Glowing rings behind the symbol -->
+                        <div class="glow-ring ring-1"></div>
+                        <div class="glow-ring ring-2"></div>
+                        
+                        <!-- The main Xertica symbol -->
+                        <img src="xertica-symbol.png" alt="Xertica Symbol" class="xertica-main-symbol">
+                        
+                        <!-- 3D Orbiting System -->
+                        <div class="orbit-system">
+                            <div class="orbit-node node-a gs-float-1">
+                                <div class="tech-node">
+                                    <span class="material-symbols-outlined">settings_suggest</span>
+                                    <span>MSP</span>
+                                </div>
+                            </div>
+                            <div class="orbit-node node-b gs-float-2">
+                                <div class="tech-node">
+                                    <span class="material-symbols-outlined">psychology</span>
+                                    <span>AI Superpowers</span>
+                                </div>
+                            </div>
+                            <div class="orbit-node node-c gs-float-3">
+                                <div class="tech-node">
+                                    <span class="material-symbols-outlined">rocket_launch</span>
+                                    <span>Hiperproductividad</span>
+                                </div>
+                            </div>
+                            <div class="orbit-node node-d gs-float-4">
+                                <div class="tech-node">
+                                    <span class="material-symbols-outlined">cloud_sync</span>
+                                    <span>MSP FinOps</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Dynamic Path Section (Based on the pink roadmap image) -->
+        <section class="path-section" style="position: relative; z-index: 2; padding: 40px 0 0 0;">
+            <div class="container">
+                <div class="section-header text-center" style="margin-bottom: 20px;">
+                    <h2 style="font-size: 2.8rem;">Pilares del Servicio MSP Estratégico</h2>
+                    <p class="section-subtitle" style="color: rgba(255,255,255,0.6); max-width: 600px; margin: 0 auto; font-size: 1rem;">
+                        Acelerando la optimización con valor medible y predictibilidad.
+                    </p>
+                </div>
+                
+                <div class="orbital-section-wrapper" id="orbitalSection">
+                    <div class="satellites-orbit" id="satellitesOrbit">
+                        
+                        <!-- Ethereal Central Core and Orbital Ring -->
+                        <div class="ethereal-core"></div>
+                        <div class="orbital-ring-guide"></div>
+                        
+                        <!-- Satellite 1 -->
+                        <div class="satellite-node sat-1">
+                            <div class="sat-content-wrapper">
+                                <div class="sat-circle">
+                                    <span class="material-symbols-outlined">account_balance_wallet</span>
+                                </div>
+                                <div class="sat-number">1</div>
+                                <div class="sat-info">
+                                    <h4>Predictibilidad Financiera</h4>
+                                    <p>Un modelo de inversión completamente desacoplado del consumo de infraestructura. Si el entorno de Salud Digna o el negocio crecen, el costo de nuestros servicios de gestión se mantiene intacto, eliminando la incertidumbre presupuestal.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Satellite 2 -->
+                        <div class="satellite-node sat-2">
+                            <div class="sat-content-wrapper">
+                                <div class="sat-circle">
+                                    <span class="material-symbols-outlined">support_agent</span>
+                                </div>
+                                <div class="sat-number">2</div>
+                                <div class="sat-info">
+                                    <h4>Gestión y Monitoreo 24/7</h4>
+                                    <p>Un equipo de operaciones certificado actuando como extensión ininterrumpida de su área de TI. Garantizamos tiempos de respuesta estrictos (SLA para incidentes críticos < 1 hora) y asumimos la gestión directa de escalaciones complejas con Google Cloud.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Satellite 3 -->
+                        <div class="satellite-node sat-3">
+                            <div class="sat-content-wrapper">
+                                <div class="sat-circle">
+                                    <span class="material-symbols-outlined">donut_small</span>
+                                </div>
+                                <div class="sat-number">3</div>
+                                <div class="sat-info">
+                                    <h4>Cultura FinOps y Mejora Continua</h4>
+                                    <p>Para evitar el "efecto rebote" en la facturación, ejecutamos análisis continuos y entregamos un reporte mensual de infraestructura con recomendaciones tácticas de optimización, asegurando la eficiencia a largo plazo.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Satellite 4 -->
+                        <div class="satellite-node sat-4">
+                            <div class="sat-content-wrapper">
+                                <div class="sat-circle">
+                                    <span class="material-symbols-outlined">shield_lock</span>
+                                </div>
+                                <div class="sat-number">4</div>
+                                <div class="sat-info">
+                                    <h4>Seguridad y Valor Añadido</h4>
+                                    <p>El servicio incluye la operación y monitoreo continuo de alertas mediante Security Command Center (SCC) para mantener el cumplimiento regulatorio, así como la implementación sin costo de un proyecto estándar de arquitectura al año.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <img src="public/logo-white.png" alt="Xertica Logo" class="footer-logo">
+                <p>Abriendo la puerta a una arquitectura eficiente y un mejor P&L.</p>
+            </div>
+            <div class="footer-bottom">
+                <span>© 2026 Xertica.ai · Todos los derechos reservados</span>
+                <span>
+                    <a href="https://www.xertica.com" target="_blank" class="footer-secret-link">xertica.com</a>
+                    Colombia · México · Perú · Chile · Ecuador · Argentina · Brasil
+                </span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Assessment Modal Overlay (Hidden by default) -->
+    <div class="modal-overlay" id="assessmentModal" style="display: none;">
+        <div class="dark-glass-card modal-card">
+            <div class="modal-header">
+                <h2>Inicia tu Assessment FinOps</h2>
+                <button class="icon-button close-modal" id="closeModalBtn">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <p>Déjanos tus datos para analizar tu consumo en GCP y determinar el ahorro específico para tu P&L.</p>
+            <form class="assessment-form" id="assessmentForm">
+                <div class="form-group full-width-group">
+                    <label for="name">Nombre completo <span class="required">*</span></label>
+                    <input type="text" id="name" placeholder="Tu nombre completo" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="empresa">Empresa <span class="required">*</span></label>
+                        <input type="text" id="empresa" placeholder="Nombre de tu empresa" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="cargo">Cargo <span class="required">*</span></label>
+                        <input type="text" id="cargo" placeholder="ej. CIO, CTO, Jefe..." required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="pais">País <span class="required">*</span></label>
+                        <div class="select-wrapper">
+                            <select id="pais" required>
+                                <option value="" disabled selected>Selecciona tu...</option>
+                                <option value="co">Colombia</option>
+                                <option value="mx">México</option>
+                                <option value="pe">Perú</option>
+                                <option value="cl">Chile</option>
+                                <option value="ec">Ecuador</option>
+                                <option value="ar">Argentina</option>
+                                <option value="br">Brasil</option>
+                            </select>
+                            <span class="material-symbols-outlined select-icon">keyboard_arrow_down</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="telefono">Teléfono <span class="required">*</span></label>
+                        <input type="tel" id="telefono" placeholder="+57 300 000 0000" required>
+                    </div>
+                </div>
+
+                <div class="form-group full-width-group">
+                    <label for="email">Email corporativo <span class="required">*</span></label>
+                    <input type="email" id="email" placeholder="nombre@empresa.com" required>
+                </div>
+                
+                <button type="submit" class="btn-primary-yellow full-width" style="margin-top: 10px;">Solicitar Análisis</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Hidden Telemetry Lock Button -->
+    <div id="telemetryLockBtn" class="telemetry-lock-btn" title="Acceso a Telemetría">
+        <span class="material-symbols-outlined">lock</span>
+    </div>
+
+    <!-- Admin Password Auth Modal -->
+    <div id="adminAuthModal" class="telemetry-modal-overlay">
+        <div class="admin-auth-card">
+            <button id="closeAuthBtn" class="close-detail-circle">✕</button>
+            <div class="detail-icon-eye">
+                <span class="material-symbols-outlined">key</span>
+            </div>
+            <h3 class="auth-title">Acceso de Administrador</h3>
+            <p class="auth-sub">Ingresa la clave de seguridad para ver la telemetría en vivo.</p>
+            <form id="adminAuthForm">
+                <div class="auth-input-wrapper">
+                    <input type="password" id="adminPasswordInput" placeholder="Contraseña de acceso" required autofocus>
+                    <span class="material-symbols-outlined pass-icon">lock</span>
+                </div>
+                <p id="authErrorMsg" class="auth-error-msg" style="display:none;">Contraseña incorrecta. Inténtalo de nuevo.</p>
+                <button type="submit" class="btn-yellow-dash full-width" style="justify-content: center; margin-top: 16px;">
+                    <span class="material-symbols-outlined">login</span> Entrar al Dashboard
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Telemetry Dashboard Modal -->
+    <div id="telemetryModal" class="telemetry-modal-overlay">
+        <div class="telemetry-dashboard-container">
+            <!-- Header -->
+            <div class="telemetry-header">
+                <div class="header-left">
+                    <div class="dash-icon-wrapper">
+                        <span class="material-symbols-outlined">analytics</span>
+                    </div>
+                    <div>
+                        <div class="dash-title-row">
+                            <h2>Dashboard de Usabilidad & Analítica de Experiencia</h2>
+                            <span class="live-badge"><span class="dot"></span> EN VIVO</span>
+                        </div>
+                        <p class="dash-subtitle">Telemetría en tiempo real: tiempo de permanencia, geolocalización, dispositivos y recorrido en el portafolio</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button id="refreshTelemetryBtn" class="btn-icon-dash" title="Actualizar Datos"><span class="material-symbols-outlined">refresh</span></button>
+                    <button id="exportCsvBtn" class="btn-yellow-dash"><span class="material-symbols-outlined">download</span> Exportar Telemetría CSV</button>
+                    <button id="closeTelemetryBtn" class="close-modal-dash"><span class="material-symbols-outlined">close</span></button>
+                </div>
+            </div>
+
+            <!-- Top Stat Cards -->
+            <div class="telemetry-stats-grid">
+                <div class="tele-card">
+                    <div class="tele-card-header">
+                        <span>TOTAL SESIONES / VISITAS</span>
+                        <span class="material-symbols-outlined icon-yellow">group</span>
+                    </div>
+                    <div class="tele-card-value" id="statTotalVisits">17</div>
+                    <div class="tele-card-sub" id="statUniqueUsers">4 Usuarios Únicos</div>
+                </div>
+
+                <div class="tele-card">
+                    <div class="tele-card-header">
+                        <span>PERMANENCIA PROMEDIO</span>
+                        <span class="material-symbols-outlined icon-blue">timer</span>
+                    </div>
+                    <div class="tele-card-value" id="statAvgTime">12m 41s</div>
+                    <div class="tele-card-sub">Tiempo activo en la app</div>
+                </div>
+
+                <div class="tele-card">
+                    <div class="tele-card-header">
+                        <span>TOP UBICACIÓN</span>
+                        <span class="material-symbols-outlined icon-green">public</span>
+                    </div>
+                    <div class="tele-card-value text-green" id="statTopLocation">Mexico 🇲🇽</div>
+                    <div class="tele-card-sub" id="statTopCity">Mexico City</div>
+                </div>
+
+                <div class="tele-card">
+                    <div class="tele-card-header">
+                        <span>DISPOSITIVOS / SO</span>
+                        <span class="material-symbols-outlined icon-pink">devices</span>
+                    </div>
+                    <div class="tele-card-value text-pink" id="statTopDevice">Desktop</div>
+                    <div class="tele-card-sub" id="statTopBrowser">Chrome / Linux</div>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="telemetry-progress-box">
+                <div class="progress-label">
+                    <span>PARTICIPACIÓN POR ETAPA DEL PORTAFOLIO</span>
+                    <span class="stages-hint">Enablement • Advisory • Factory • Support</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" style="width: 100%;"></div>
+                </div>
+            </div>
+
+            <!-- Authorized Admins Bar -->
+            <div class="telemetry-admin-box">
+                <div class="admin-title">
+                    <span class="material-symbols-outlined icon-yellow">lock</span>
+                    <strong>Administradores Autorizados con Permisos de Lectura</strong>
+                </div>
+                <div class="admin-input-row">
+                    <input type="email" id="adminEmailInput" placeholder="ejemplo.colega@xertica.com">
+                    <button id="addAdminBtn" class="btn-add-admin"><span class="material-symbols-outlined">person_add</span> + Añadir Admin</button>
+                </div>
+                <div class="admin-tags-list" id="adminTagsList">
+                    <span class="admin-tag">patricio.martin@xertica.com <span class="remove-admin" data-email="patricio.martin@xertica.com">×</span></span>
+                </div>
+            </div>
+
+            <!-- Admin Login Logs Section -->
+            <div class="telemetry-admin-box" style="margin-bottom: 24px;">
+                <div class="admin-title">
+                    <span class="material-symbols-outlined icon-yellow">key</span>
+                    <strong>🔑 Historial de Inicios de Sesión & Accesos (Logins)</strong>
+                </div>
+                <div class="telemetry-table-wrapper" style="max-height: 200px; overflow-y: auto;">
+                    <table class="telemetry-table">
+                        <thead>
+                            <tr>
+                                <th>FECHA Y HORA</th>
+                                <th>ESTADO</th>
+                                <th>CLAVE INGRESADA</th>
+                                <th>UBICACIÓN / IP</th>
+                                <th>DISPOSITIVO / SO</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminLoginsTableBody">
+                            <!-- Rendered by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Search and Filter Bar -->
+            <div class="telemetry-filter-row">
+                <div class="search-input-wrapper">
+                    <span class="material-symbols-outlined search-icon">search</span>
+                    <input type="text" id="telemetrySearchInput" placeholder="Buscar por Usuario, Correo, Ciudad, Dispositivo o Caso de Uso...">
+                </div>
+                <button id="clearHistoryBtn" class="btn-danger-outline"><span class="material-symbols-outlined">delete_sweep</span> Limpiar Historial</button>
+            </div>
+
+            <!-- Sessions Table -->
+            <div class="telemetry-table-wrapper">
+                <table class="telemetry-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>USUARIO / CORREO</th>
+                            <th>DÍA Y HORA</th>
+                            <th>UBICACIÓN</th>
+                            <th>PERMANENCIA</th>
+                            <th>DISPOSITIVO / SO</th>
+                            <th>ETAPAS CONSULTADAS</th>
+                            <th>ACCIONES</th>
+                        </tr>
+                    </thead>
+                    <tbody id="telemetryTableBody">
+                        <!-- Rows rendered dynamically by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Telemetry Detail Modal -->
+    <div id="telemetryDetailModal" class="telemetry-modal-overlay">
+        <div class="telemetry-detail-card">
+            <button id="closeDetailBtn" class="close-detail-circle">✕</button>
+            <div class="detail-icon-eye">
+                <span class="material-symbols-outlined">visibility</span>
+            </div>
+            
+            <h3 id="detailUserName" class="detail-user-title">Patricio Martin</h3>
+            <p id="detailUserEmail" class="detail-user-email">patricio.martin@xertica.com</p>
+
+            <div class="detail-info-box">
+                <p><span class="material-symbols-outlined icon-small">timer</span> <strong>TIEMPO DE PERMANENCIA ACTIVO:</strong> <span id="detailActiveTime">10 min 26 seg</span></p>
+                <p><span class="material-symbols-outlined icon-small">push_pin</span> <strong>UBICACIÓN GEOGRÁFICA:</strong> <span id="detailGeoLoc">Mexico City, Mexico 🇲🇽</span></p>
+                <p><span class="material-symbols-outlined icon-small">language</span> <strong>PROVEEDOR DE RED / IP:</strong> <span id="detailIp">Megacable Comunicaciones de Mexico, S.A. de C.V.</span></p>
+                <p><span class="material-symbols-outlined icon-small">laptop_chromebook</span> <strong>DISPOSITIVO & NAVEGADOR:</strong> <span id="detailDeviceBrowser">Desktop • Chrome (Linux / ChromeOS)</span></p>
+                <p><span class="material-symbols-outlined icon-small">desktop_windows</span> <strong>RESOLUCIÓN DE PANTALLA:</strong> <span id="detailResolution">1600×1000</span></p>
+                <p><span class="material-symbols-outlined icon-small">bolt</span> <strong>INTERACCIONES CLICS:</strong> <span id="detailClicks" class="text-yellow">33 acciones registradas</span></p>
+            </div>
+
+            <div class="detail-use-cases-box">
+                <h4>💡 CASOS DE USO CONSULTADOS EN ESTA SESIÓN:</h4>
+                <ul id="detailUseCasesList">
+                    <li>Navegación general en el portafolio</li>
+                </ul>
+            </div>
+
+            <button id="deleteSessionBtn" class="btn-delete-session"><span class="material-symbols-outlined">delete</span> Eliminar este Ingreso de Prueba</button>
+        </div>
+    </div>
+</body>
+</html>
