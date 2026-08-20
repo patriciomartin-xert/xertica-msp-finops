@@ -540,10 +540,37 @@ function initTelemetrySystem() {
     else if (ua.includes('Android')) osName = 'Android';
     else if (ua.includes('iPhone') || ua.includes('iPad')) osName = 'iOS';
 
+    // 2. Auto-detect URL Parameters for Zero-Friction Visitor Identification
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlEmpresa = urlParams.get('empresa') || urlParams.get('cliente') || urlParams.get('c') || urlParams.get('utm_company');
+    const urlNombre = urlParams.get('nombre') || urlParams.get('contacto') || urlParams.get('n');
+    const urlRef = urlParams.get('ref') || urlParams.get('utm_source') || urlParams.get('source');
+
+    let initialName = 'Visitante Web';
+    let initialEmail = 'visitante.desconocido@red';
+
+    if (urlEmpresa || urlNombre) {
+        if (urlNombre && urlEmpresa) {
+            initialName = `${urlNombre} (${urlEmpresa})`;
+            initialEmail = `contacto@${urlEmpresa.toLowerCase().replace(/\s+/g, '')}.com`;
+        } else if (urlEmpresa) {
+            initialName = `Visitante de ${urlEmpresa}`;
+            initialEmail = `enlace_personalizado@${urlEmpresa.toLowerCase().replace(/\s+/g, '')}.com`;
+        } else {
+            initialName = `${urlNombre} (Prospecto)`;
+            initialEmail = `prospecto_url@red`;
+        }
+        currentUseCases.add(`Enlace Personalizado: ${urlEmpresa || urlNombre}`);
+    } else if (urlRef) {
+        initialName = `Visitante (vía ${urlRef})`;
+        initialEmail = `origen_${urlRef}@red`;
+        currentUseCases.add(`Origen de Tráfico: ${urlRef}`);
+    }
+
     let currentSession = {
         id: currentSessionId,
-        userName: 'Sesión Actual (En Vivo)',
-        userEmail: 'visitante.actual@xertica.com',
+        userName: initialName,
+        userEmail: initialEmail,
         dateStr: new Date().toLocaleString('es-MX'),
         location: 'Mexico City, Mexico 🇲🇽',
         ipProvider: 'Red Local / Proveedor ISP Activo',
@@ -559,7 +586,14 @@ function initTelemetrySystem() {
         if (data && data.city && data.country_name) {
             let flag = data.country_code === 'MX' ? '🇲🇽' : (data.country_code === 'CO' ? '🇨🇴' : '🌐');
             currentSession.location = `${data.city}, ${data.country_name} ${flag}`;
-            if (data.org) currentSession.ipProvider = data.org;
+            if (data.org) {
+                currentSession.ipProvider = data.org;
+                // If no custom URL parameter was provided, enrich session with ISP/Corporate Org name
+                if (!urlEmpresa && !urlNombre && !urlRef && currentSession.userName === 'Visitante Web') {
+                    currentSession.userName = `Visitante (${data.org})`;
+                    currentSession.userEmail = `red_${data.org.toLowerCase().replace(/[^a-z0-9]/g, '')}@red`;
+                }
+            }
             saveAndRenderCurrentSession();
         }
     }).catch(() => {});
@@ -587,6 +621,58 @@ function initTelemetrySystem() {
         if (e.target.closest('#assessmentBtn') || e.target.closest('#headerAssessmentBtn')) {
             currentStages.add('Support');
             currentUseCases.add('Apertura de Solicitud de Assessment');
+        }
+
+        // Quick Tag Chip Handler (1-tap context capture)
+        const cloudChip = e.target.closest('.tag-cloud-btn');
+        if (cloudChip) {
+            const cloud = cloudChip.getAttribute('data-cloud');
+            currentUseCases.add(`Entorno Cloud: ${cloud}`);
+            cloudChip.style.background = 'rgba(250, 243, 56, 0.25)';
+            cloudChip.style.borderColor = 'var(--xe-yellow)';
+            cloudChip.style.color = '#FFF';
+            saveAndRenderCurrentSession();
+        }
+
+        const indChip = e.target.closest('.tag-ind-btn');
+        if (indChip) {
+            const ind = indChip.getAttribute('data-ind');
+            currentUseCases.add(`Industria: ${ind}`);
+            indChip.style.background = 'rgba(250, 243, 56, 0.25)';
+            indChip.style.borderColor = 'var(--xe-yellow)';
+            indChip.style.color = '#FFF';
+            saveAndRenderCurrentSession();
+        }
+    });
+
+    // Sync Assessment Form Inputs with Live Telemetry Session in Real-Time
+    const nameInput = document.getElementById('name');
+    const empresaInput = document.getElementById('empresa');
+    const cargoInput = document.getElementById('cargo');
+    const emailInput = document.getElementById('email');
+
+    function syncFormToTelemetry() {
+        const nVal = nameInput ? nameInput.value.trim() : '';
+        const empVal = empresaInput ? empresaInput.value.trim() : '';
+        const cargoVal = cargoInput ? cargoInput.value.trim() : '';
+        const emailVal = emailInput ? emailInput.value.trim() : '';
+
+        if (nVal || empVal) {
+            let label = nVal || 'Prospecto';
+            if (empVal) label += ` (${cargoVal ? cargoVal + ' en ' : ''}${empVal})`;
+            currentSession.userName = label;
+        }
+        if (emailVal) {
+            currentSession.userEmail = emailVal;
+        }
+        currentStages.add('Support');
+        currentUseCases.add('Escribiendo en Formulario de Assessment');
+        saveAndRenderCurrentSession();
+    }
+
+    [nameInput, empresaInput, cargoInput, emailInput].forEach(inp => {
+        if (inp) {
+            inp.addEventListener('input', syncFormToTelemetry);
         }
     });
 
