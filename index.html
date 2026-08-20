@@ -268,25 +268,10 @@
                 <span class="material-symbols-outlined">key</span>
             </div>
             <h3 class="auth-title">Acceso de Administrador</h3>
-            <p class="auth-sub">Rellena con un perfil rápido o ingresa tus datos.</p>
-
-            <!-- Quick Auto-Fill Chips -->
-            <div class="preset-chips-wrapper">
-                <button type="button" class="chip-btn" id="presetAdminBtn">👤 Admin (Patricio)</button>
-                <button type="button" class="chip-btn" id="presetClientBtn">🏢 Cliente / Prospecto</button>
-            </div>
-
+            <p class="auth-sub">Ingresa la clave de seguridad para ver la telemetría en vivo.</p>
             <form id="adminAuthForm">
-                <div class="auth-input-wrapper" style="margin-bottom: 10px;">
-                    <input type="text" id="adminAuthNameInput" placeholder="Nombre de usuario" value="Patricio Martin">
-                    <span class="material-symbols-outlined pass-icon">person</span>
-                </div>
-                <div class="auth-input-wrapper" style="margin-bottom: 10px;">
-                    <input type="email" id="adminAuthEmailInput" placeholder="Correo / Empresa" value="patricio.martin@xertica.com">
-                    <span class="material-symbols-outlined pass-icon">mail</span>
-                </div>
                 <div class="auth-input-wrapper">
-                    <input type="password" id="adminPasswordInput" placeholder="Contraseña de acceso" required>
+                    <input type="password" id="adminPasswordInput" placeholder="Contraseña de acceso" required autofocus>
                     <span class="material-symbols-outlined pass-icon">lock</span>
                 </div>
                 <p id="authErrorMsg" class="auth-error-msg" style="display:none;">Contraseña incorrecta. Inténtalo de nuevo.</p>

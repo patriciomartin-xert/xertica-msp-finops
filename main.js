@@ -991,45 +991,19 @@ function initTelemetrySystem() {
         });
     }
 
-    const presetAdminBtn = document.getElementById('presetAdminBtn');
-    const presetClientBtn = document.getElementById('presetClientBtn');
-    const authNameInput = document.getElementById('adminAuthNameInput');
-    const authEmailInput = document.getElementById('adminAuthEmailInput');
-
-    if (presetAdminBtn) {
-        presetAdminBtn.addEventListener('click', () => {
-            if (authNameInput) authNameInput.value = 'Patricio Martin';
-            if (authEmailInput) authEmailInput.value = 'patricio.martin@xertica.com';
-            if (passInput) passInput.value = 'Eirs2026.';
-        });
-    }
-    if (presetClientBtn) {
-        presetClientBtn.addEventListener('click', () => {
-            if (authNameInput) authNameInput.value = 'Cliente Demo';
-            if (authEmailInput) authEmailInput.value = 'prospecto@empresa.com';
-            if (passInput) passInput.value = 'Eirs2026.';
-        });
-    }
-
     if (authForm) {
         authForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const val = passInput.value.trim();
-            const uName = authNameInput ? authNameInput.value.trim() : 'Patricio Martin';
-            const uEmail = authEmailInput ? authEmailInput.value.trim() : 'patricio.martin@xertica.com';
 
             if (val === 'Eirs2026.') {
-                recordLoginAttempt(true, val, uName, uEmail);
-                if (currentSession) {
-                    currentSession.userName = uName || 'Sesión Actual';
-                    currentSession.userEmail = uEmail || 'visitante@xertica.com';
-                }
+                recordLoginAttempt(true, val, 'Patricio Martin', 'patricio.martin@xertica.com');
                 if (authErrorMsg) authErrorMsg.style.display = 'none';
                 authModal.classList.remove('active');
                 teleModal.classList.add('active');
                 renderDashboard();
             } else {
-                recordLoginAttempt(false, val, uName, uEmail);
+                recordLoginAttempt(false, val, 'Desconocido', 'desconocido@red');
                 if (authErrorMsg) authErrorMsg.style.display = 'block';
                 if (passInput) {
                     passInput.style.borderColor = '#ef4444';
