@@ -830,7 +830,7 @@ function initTelemetrySystem() {
             return;
         }
 
-        logs.forEach(log => {
+        logs.forEach((log, index) => {
             const tr = document.createElement('tr');
             const isSuccess = log.status === 'Éxito';
             const badgeClass = isSuccess ? 'live-badge' : 'time-badge';
@@ -842,8 +842,23 @@ function initTelemetrySystem() {
                 <td><code>${log.keyTyped}</code></td>
                 <td>${log.location}</td>
                 <td>${log.device}</td>
+                <td style="text-align:center;">
+                    <button class="btn-delete-log" data-index="${index}" style="background: none; border: none; color: #ef4444; cursor: pointer;" title="Eliminar este ingreso">
+                        <span class="material-symbols-outlined" style="font-size: 20px;">delete</span>
+                    </button>
+                </td>
             `;
             loginsTableBody.appendChild(tr);
+        });
+
+        // Add event listeners for delete buttons
+        document.querySelectorAll('.btn-delete-log').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const idx = e.currentTarget.getAttribute('data-index');
+                logs.splice(idx, 1);
+                localStorage.setItem('xertica_admin_login_logs', JSON.stringify(logs));
+                renderAdminLoginLogs();
+            });
         });
     }
 
