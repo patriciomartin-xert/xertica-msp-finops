@@ -184,10 +184,16 @@ function initHeroAnimations() {
 
     // Add interactive click animations to the orbit tech nodes
     const techNodes = document.querySelectorAll('.tech-node');
+    let isExploded = false;
+
     techNodes.forEach(node => {
         node.addEventListener('click', function() {
-            // Toggle active state class for color/glow change defined in CSS
-            this.classList.toggle('clicked');
+            if (isExploded) return;
+
+            // Activate node
+            if (!this.classList.contains('clicked')) {
+                this.classList.add('clicked');
+            }
             
             // GSAP bounce/wobble effect
             gsap.fromTo(this, 
@@ -199,8 +205,82 @@ function initHeroAnimations() {
                     ease: "elastic.out(1.2, 0.3)" 
                 }
             );
+
+            // Check if all 4 are active
+            const allActive = Array.from(techNodes).every(n => n.classList.contains('clicked'));
+            if (allActive && !isExploded) {
+                isExploded = true;
+                triggerEasterEggExplosion();
+            }
         });
     });
+
+    function triggerEasterEggExplosion() {
+        const tl = gsap.timeline();
+        
+        // 1. Shake and charge up
+        tl.to(".xertica-main-symbol", {
+            duration: 0.1,
+            x: "random(-15, 15)",
+            y: "random(-15, 15)",
+            rotation: "random(-10, 10)",
+            filter: "brightness(3) drop-shadow(0 0 60px rgba(250, 243, 56, 1))",
+            repeat: 7,
+            yoyo: true,
+            ease: "none"
+        })
+        // 2. BOOM! Explode the main symbol
+        .to(".xertica-main-symbol", {
+            duration: 0.6,
+            scale: 6,
+            opacity: 0,
+            rotation: 1080,
+            filter: "brightness(10) blur(30px)",
+            ease: "expo.in"
+        })
+        // 3. Explode the rings outward
+        .to(".glow-ring", {
+            duration: 0.8,
+            scale: 4,
+            opacity: 0,
+            stagger: 0.1,
+            ease: "power2.out"
+        }, "-=0.6")
+        // 4. Scatter the tech nodes in 3D space
+        .to(".orbit-node", {
+            duration: 1.2,
+            x: "random(-1000, 1000)",
+            y: "random(-1000, 1000)",
+            z: "random(-800, 800)",
+            rotationX: "random(-720, 720)",
+            rotationY: "random(-720, 720)",
+            opacity: 0,
+            ease: "power3.out"
+        }, "-=0.8")
+        // 5. Calm down, then Rebirth (fade back in)
+        .to([".xertica-main-symbol", ".glow-ring", ".orbit-node"], {
+            duration: 2.5,
+            scale: 1,
+            opacity: 1,
+            x: 0,
+            y: 0,
+            z: 0,
+            rotation: 0,
+            rotationX: 0,
+            rotationY: 0,
+            filter: "brightness(1) blur(0px) drop-shadow(0 0 30px rgba(250, 243, 56, 0.4))",
+            ease: "power2.inOut",
+            onComplete: () => {
+                // Remove clicked classes
+                techNodes.forEach(n => n.classList.remove('clicked'));
+                // Clear inline GSAP styles to restore pure CSS control for orbits
+                gsap.set(".orbit-node", { clearProps: "all" });
+                gsap.set(".xertica-main-symbol", { clearProps: "all" });
+                gsap.set(".glow-ring", { clearProps: "all" });
+                isExploded = false;
+            }
+        }, "+=1.5");
+    }
 }
 
 // --- 3. Scroll-Linked Orbital Satellites ---
