@@ -1,0 +1,191 @@
+    <!-- CRM Dashboard Modal -->
+    <div id="crmModal" class="telemetry-modal-overlay">
+        <div class="telemetry-dashboard-card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column;">
+            <!-- Global Admin Nav Tabs -->
+            <div class="admin-global-tabs">
+                <button class="admin-tab" id="tabGoTelemetry">
+                    <span class="material-symbols-outlined">monitoring</span> Métricas y Telemetría
+                </button>
+                <button class="admin-tab active">
+                    <span class="material-symbols-outlined">group</span> CRM y Prospectos
+                </button>
+            </div>
+            
+            <!-- CRM Header inside modal -->
+            <div class="telemetry-header" style="padding: 24px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                <div class="telemetry-title-group">
+                    <span class="material-symbols-outlined icon-yellow" style="color: #4ade80;">group</span>
+                    <div>
+                        <h2>Portal CRM & Prospectos MSP</h2>
+                        <p>Gestión de pipeline, contactos y tableros Kanban en vivo</p>
+                    </div>
+                </div>
+                <div class="telemetry-controls" style="display:flex; gap:12px; align-items: center;">
+                    <button id="openNewLeadBtn" class="btn-yellow-dash" style="background: var(--xe-yellow); color: #000; border: none; padding: 8px 16px; border-radius: 8px; display: flex; align-items: center; gap: 6px; font-weight: 600; font-size: 0.9rem; cursor: pointer;">
+                        <span class="material-symbols-outlined" style="font-size: 18px;">person_add</span> Nuevo Prospecto
+                    </button>
+                    <span class="badge-live-pulse"><span class="pulse-dot"></span> EN VIVO</span>
+                    <button id="closeCrmBtn" class="close-modal-dash"><span class="material-symbols-outlined">close</span></button>
+                </div>
+            </div>
+
+            <!-- Main CRM Content -->
+            <div style="padding: 24px; overflow-y: auto; flex: 1;">
+                <!-- Top KPI Overview Cards -->
+                <section class="crm-kpi-grid">
+                    <div class="kpi-card">
+                        <span class="material-symbols-outlined kpi-icon text-yellow">groups</span>
+                        <div class="kpi-content">
+                            <span class="kpi-value" id="kpiTotalLeads">0</span>
+                            <span class="kpi-label">Total Prospectos Capturados</span>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <span class="material-symbols-outlined kpi-icon text-green">attach_money</span>
+                        <div class="kpi-content">
+                            <span class="kpi-value" id="kpiPipelineValue">$0 USD</span>
+                            <span class="kpi-label">Valor Estimado en Pipeline</span>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <span class="material-symbols-outlined kpi-icon text-blue">event_available</span>
+                        <div class="kpi-content">
+                            <span class="kpi-value" id="kpiAssessmentsCount">0</span>
+                            <span class="kpi-label">Assessments Agendados</span>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <span class="material-symbols-outlined kpi-icon text-purple">verified</span>
+                        <div class="kpi-content">
+                            <span class="kpi-value" id="kpiQualifiedCount">0</span>
+                            <span class="kpi-label">Leads Calificados / Cierre</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Controls, Filters & View Toggles -->
+                <section class="crm-toolbar">
+                    <div class="toolbar-search-group">
+                        <div class="search-input-wrapper">
+                            <span class="material-symbols-outlined search-icon">search</span>
+                            <input type="text" id="crmSearchInput" placeholder="Buscar por Nombre, Empresa, Email, Cargo o País...">
+                        </div>
+
+                        <div class="select-filter-wrapper">
+                            <select id="crmCountryFilter">
+                                <option value="ALL">Todos los Países</option>
+                                <option value="Colombia">Colombia</option>
+                                <option value="México">México</option>
+                                <option value="Perú">Perú</option>
+                                <option value="Chile">Chile</option>
+                                <option value="Ecuador">Ecuador</option>
+                                <option value="Argentina">Argentina</option>
+                                <option value="Brasil">Brasil</option>
+                            </select>
+                        </div>
+
+                        <div class="select-filter-wrapper">
+                            <select id="crmStageFilter">
+                                <option value="ALL">Todas las Etapas</option>
+                                <option value="Nuevos Leads">Nuevos Leads</option>
+                                <option value="En Contacto">En Contacto</option>
+                                <option value="Assessment Agendado">Assessment Agendado</option>
+                                <option value="Propuesta Enviada">Propuesta Enviada</option>
+                                <option value="Ganado / Cierre">Ganado / Cierre</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="toolbar-actions">
+                        <div class="view-toggle-buttons">
+                            <button id="toggleTableViewBtn" class="btn-toggle active" title="Vista de Tabla">
+                                <span class="material-symbols-outlined">table_chart</span> Tabla
+                            </button>
+                            <button id="toggleKanbanViewBtn" class="btn-toggle" title="Vista de Tablero Kanban">
+                                <span class="material-symbols-outlined">view_kanban</span> Kanban
+                            </button>
+                        </div>
+
+                        <button id="exportLeadsCsvBtn" class="btn-outline-sm" title="Exportar a CSV">
+                            <span class="material-symbols-outlined">download</span> Exportar CSV
+                        </button>
+                    </div>
+                </section>
+
+                <!-- VIEW 1: TABLE VIEW -->
+                <section id="crmTableView" class="crm-view-section active">
+                    <div class="telemetry-table-wrapper">
+                        <table class="telemetry-table crm-table">
+                            <thead>
+                                <tr>
+                                    <th>PROSPECTO / CONTACTO</th>
+                                    <th>EMPRESA / CARGO</th>
+                                    <th>PAÍS</th>
+                                    <th>FECHA</th>
+                                    <th>VALOR EST.</th>
+                                    <th>ETAPA DEL PIPELINE</th>
+                                    <th style="text-align:center;">ACCIONES</th>
+                                </tr>
+                            </thead>
+                            <tbody id="crmTableBody">
+                                <!-- Populated by crm.js -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- VIEW 2: KANBAN BOARD VIEW -->
+                <section id="crmKanbanView" class="crm-view-section" style="display: none;">
+                    <div class="kanban-board-grid">
+                        <!-- Column 1: Nuevos Leads -->
+                        <div class="kanban-column" data-stage="Nuevos Leads">
+                            <div class="kanban-column-header header-new">
+                                <span class="col-title"><span class="col-dot dot-new"></span> 📥 Nuevos Leads</span>
+                                <span class="col-count" id="countStageNew">0</span>
+                            </div>
+                            <div class="kanban-cards-container" id="kanbanContainerNew"></div>
+                        </div>
+
+                        <!-- Column 2: En Contacto -->
+                        <div class="kanban-column" data-stage="En Contacto">
+                            <div class="kanban-column-header header-contact">
+                                <span class="col-title"><span class="col-dot dot-contact"></span> 📞 En Contacto</span>
+                                <span class="col-count" id="countStageContact">0</span>
+                            </div>
+                            <div class="kanban-cards-container" id="kanbanContainerContact"></div>
+                        </div>
+
+                        <!-- Column 3: Assessment Agendado -->
+                        <div class="kanban-column" data-stage="Assessment Agendado">
+                            <div class="kanban-column-header header-assessment">
+                                <span class="col-title"><span class="col-dot dot-assessment"></span> 📅 Assessment Agendado</span>
+                                <span class="col-count" id="countStageAssessment">0</span>
+                            </div>
+                            <div class="kanban-cards-container" id="kanbanContainerAssessment"></div>
+                        </div>
+
+                        <!-- Column 4: Propuesta Enviada -->
+                        <div class="kanban-column" data-stage="Propuesta Enviada">
+                            <div class="kanban-column-header header-proposal">
+                                <span class="col-title"><span class="col-dot dot-proposal"></span> 📄 Propuesta Enviada</span>
+                                <span class="col-count" id="countStageProposal">0</span>
+                            </div>
+                            <div class="kanban-cards-container" id="kanbanContainerProposal"></div>
+                        </div>
+
+                        <!-- Column 5: Ganado / Cierre -->
+                        <div class="kanban-column" data-stage="Ganado / Cierre">
+                            <div class="kanban-column-header header-won">
+                                <span class="col-title"><span class="col-dot dot-won"></span> 🤝 Ganado / Cierre</span>
+                                <span class="col-count" id="countStageWon">0</span>
+                            </div>
+                            <div class="kanban-cards-container" id="kanbanContainerWon"></div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>

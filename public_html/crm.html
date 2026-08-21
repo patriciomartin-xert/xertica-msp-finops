@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM & Gestión de Prospectos | Xertica MSP FinOps</title>
+    <meta name="description" content="Portal CRM para gestión, seguimiento y calificación de prospectos y solicitudes de Assessment FinOps en Xertica.ai">
+    
+    <!-- Google Fonts & Material Symbols -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="public/logo-white.png">
+</head>
+<body class="crm-body">
+
+    <!-- Top Navigation Header -->
+    <header class="crm-navbar">
+        <div class="crm-nav-container">
+            <div class="crm-brand">
+                <a href="index.html">
+                    <img src="public/logo-white.png" alt="Xertica Logo" class="crm-logo">
+                </a>
+                <div class="crm-brand-divider"></div>
+                <div class="crm-title-group">
+                    <h1>Portal CRM & Prospectos MSP</h1>
+                    <span class="badge-live-pulse"><span class="pulse-dot"></span> PIPELINE EN VIVO</span>
+                </div>
+            </div>
+            
+            <div class="crm-nav-actions">
+                <a href="index.html" class="btn-outline-sm">
+                    <span class="material-symbols-outlined">arrow_back</span> Volver a Landing
+                </a>
+                <button id="openNewLeadBtn" class="btn-yellow-dash">
+                    <span class="material-symbols-outlined">person_add</span> Nuevo Prospecto
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main CRM Container -->
+    <main class="crm-main-container">
+        <!-- Top KPI Overview Cards -->
+        <section class="crm-kpi-grid">
+            <div class="kpi-card">
+                <span class="material-symbols-outlined kpi-icon text-yellow">groups</span>
+                <div class="kpi-content">
+                    <span class="kpi-value" id="kpiTotalLeads">0</span>
+                    <span class="kpi-label">Total Prospectos Capturados</span>
+                </div>
+            </div>
+
+            <div class="kpi-card">
+                <span class="material-symbols-outlined kpi-icon text-green">attach_money</span>
+                <div class="kpi-content">
+                    <span class="kpi-value" id="kpiPipelineValue">$0 USD</span>
+                    <span class="kpi-label">Valor Estimado en Pipeline</span>
+                </div>
+            </div>
+
+            <div class="kpi-card">
+                <span class="material-symbols-outlined kpi-icon text-blue">event_available</span>
+                <div class="kpi-content">
+                    <span class="kpi-value" id="kpiAssessmentsCount">0</span>
+                    <span class="kpi-label">Assessments Agendados</span>
+                </div>
+            </div>
+
+            <div class="kpi-card">
+                <span class="material-symbols-outlined kpi-icon text-purple">verified</span>
+                <div class="kpi-content">
+                    <span class="kpi-value" id="kpiQualifiedCount">0</span>
+                    <span class="kpi-label">Leads Calificados / Cierre</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Controls, Filters & View Toggles -->
+        <section class="crm-toolbar">
+            <div class="toolbar-search-group">
+                <div class="search-input-wrapper">
+                    <span class="material-symbols-outlined search-icon">search</span>
+                    <input type="text" id="crmSearchInput" placeholder="Buscar por Nombre, Empresa, Email, Cargo o País...">
+                </div>
+
+                <div class="select-filter-wrapper">
+                    <select id="crmCountryFilter">
+                        <option value="ALL">🌍 Todos los Países</option>
+                        <option value="Colombia">Colombia 🇨🇴</option>
+                        <option value="México">México 🇲🇽</option>
+                        <option value="Perú">Perú 🇵🇪</option>
+                        <option value="Chile">Chile 🇨🇱</option>
+                        <option value="Ecuador">Ecuador 🇪🇨</option>
+                        <option value="Argentina">Argentina 🇦🇷</option>
+                        <option value="Brasil">Brasil 🇧🇷</option>
+                    </select>
+                </div>
+
+                <div class="select-filter-wrapper">
+                    <select id="crmStageFilter">
+                        <option value="ALL">📌 Todas las Etapas</option>
+                        <option value="Nuevos Leads">📥 Nuevos Leads</option>
+                        <option value="En Contacto">📞 En Contacto</option>
+                        <option value="Assessment Agendado">📅 Assessment Agendado</option>
+                        <option value="Propuesta Enviada">📄 Propuesta Enviada</option>
+                        <option value="Ganado / Cierre">🤝 Ganado / Cierre</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="toolbar-actions">
+                <div class="view-toggle-buttons">
+                    <button id="toggleTableViewBtn" class="btn-toggle active" title="Vista de Tabla">
+                        <span class="material-symbols-outlined">table_chart</span> Tabla
+                    </button>
+                    <button id="toggleKanbanViewBtn" class="btn-toggle" title="Vista de Tablero Kanban">
+                        <span class="material-symbols-outlined">view_kanban</span> Kanban
+                    </button>
+                </div>
+
+                <button id="exportLeadsCsvBtn" class="btn-outline-sm" title="Exportar a CSV">
+                    <span class="material-symbols-outlined">download</span> Exportar CSV
+                </button>
+            </div>
+        </section>
+
+        <!-- VIEW 1: TABLE VIEW -->
+        <section id="crmTableView" class="crm-view-section active">
+            <div class="telemetry-table-wrapper">
+                <table class="telemetry-table crm-table">
+                    <thead>
+                        <tr>
+                            <th>PROSPECTO / CONTACTO</th>
+                            <th>EMPRESA / CARGO</th>
+                            <th>PAÍS</th>
+                            <th>FECHA</th>
+                            <th>VALOR EST.</th>
+                            <th>ETAPA DEL PIPELINE</th>
+                            <th style="text-align:center;">ACCIONES</th>
+                        </tr>
+                    </thead>
+                    <tbody id="crmTableBody">
+                        <!-- Populated by crm.js -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- VIEW 2: KANBAN BOARD VIEW -->
+        <section id="crmKanbanView" class="crm-view-section" style="display: none;">
+            <div class="kanban-board-grid">
+                <!-- Column 1: Nuevos Leads -->
+                <div class="kanban-column" data-stage="Nuevos Leads">
+                    <div class="kanban-column-header header-new">
+                        <span class="col-title"><span class="col-dot dot-new"></span> 📥 Nuevos Leads</span>
+                        <span class="col-count" id="countStageNew">0</span>
+                    </div>
+                    <div class="kanban-cards-container" id="kanbanContainerNew"></div>
+                </div>
+
+                <!-- Column 2: En Contacto -->
+                <div class="kanban-column" data-stage="En Contacto">
+                    <div class="kanban-column-header header-contact">
+                        <span class="col-title"><span class="col-dot dot-contact"></span> 📞 En Contacto</span>
+                        <span class="col-count" id="countStageContact">0</span>
+                    </div>
+                    <div class="kanban-cards-container" id="kanbanContainerContact"></div>
+                </div>
+
+                <!-- Column 3: Assessment Agendado -->
+                <div class="kanban-column" data-stage="Assessment Agendado">
+                    <div class="kanban-column-header header-assessment">
+                        <span class="col-title"><span class="col-dot dot-assessment"></span> 📅 Assessment Agendado</span>
+                        <span class="col-count" id="countStageAssessment">0</span>
+                    </div>
+                    <div class="kanban-cards-container" id="kanbanContainerAssessment"></div>
+                </div>
+
+                <!-- Column 4: Propuesta Enviada -->
+                <div class="kanban-column" data-stage="Propuesta Enviada">
+                    <div class="kanban-column-header header-proposal">
+                        <span class="col-title"><span class="col-dot dot-proposal"></span> 📄 Propuesta Enviada</span>
+                        <span class="col-count" id="countStageProposal">0</span>
+                    </div>
+                    <div class="kanban-cards-container" id="kanbanContainerProposal"></div>
+                </div>
+
+                <!-- Column 5: Ganado / Cierre -->
+                <div class="kanban-column" data-stage="Ganado / Cierre">
+                    <div class="kanban-column-header header-won">
+                        <span class="col-title"><span class="col-dot dot-won"></span> 🤝 Ganado / Cierre</span>
+                        <span class="col-count" id="countStageWon">0</span>
+                    </div>
+                    <div class="kanban-cards-container" id="kanbanContainerWon"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- LEAD DETAIL MODAL / DRAWER -->
+    <div id="leadDetailModal" class="telemetry-modal-overlay">
+        <div class="telemetry-detail-card crm-detail-card">
+            <button id="closeLeadDetailBtn" class="close-detail-circle">✕</button>
+            <div class="detail-icon-eye">
+                <span class="material-symbols-outlined">badge</span>
+            </div>
+
+            <h3 id="leadDetailName" class="detail-user-title">Nombre del Prospecto</h3>
+            <p id="leadDetailSub" class="detail-user-email">Cargo @ Empresa</p>
+
+            <!-- Quick Action Contact Buttons -->
+            <div class="lead-action-bar">
+                <a id="leadWhatsAppBtn" href="#" target="_blank" class="btn-action-lead btn-wa">
+                    <span class="material-symbols-outlined">chat</span> WhatsApp
+                </a>
+                <a id="leadEmailBtn" href="#" class="btn-action-lead btn-mail">
+                    <span class="material-symbols-outlined">mail</span> Enviar Correo
+                </a>
+            </div>
+
+            <!-- Stage Selector Box -->
+            <div class="detail-stage-box">
+                <label for="leadDetailStageSelect">Etapa del Embudo Comercial:</label>
+                <select id="leadDetailStageSelect" class="lead-stage-dropdown">
+                    <option value="Nuevos Leads">📥 Nuevos Leads</option>
+                    <option value="En Contacto">📞 En Contacto</option>
+                    <option value="Assessment Agendado">📅 Assessment Agendado</option>
+                    <option value="Propuesta Enviada">📄 Propuesta Enviada</option>
+                    <option value="Ganado / Cierre">🤝 Ganado / Cierre</option>
+                </select>
+            </div>
+
+            <!-- Detail Information -->
+            <div class="detail-info-box">
+                <p><span class="material-symbols-outlined icon-small">corporate_fare</span> <strong>EMPRESA:</strong> <span id="leadDetailEmpresa"></span></p>
+                <p><span class="material-symbols-outlined icon-small">badge</span> <strong>CARGO:</strong> <span id="leadDetailCargo"></span></p>
+                <p><span class="material-symbols-outlined icon-small">public</span> <strong>PAÍS:</strong> <span id="leadDetailPais"></span></p>
+                <p><span class="material-symbols-outlined icon-small">phone</span> <strong>TELÉFONO:</strong> <span id="leadDetailPhone"></span></p>
+                <p><span class="material-symbols-outlined icon-small">mail</span> <strong>EMAIL:</strong> <span id="leadDetailEmail"></span></p>
+                <p><span class="material-symbols-outlined icon-small">attach_money</span> <strong>VALOR ESTIMADO:</strong> <span id="leadDetailValue" class="text-green"></span></p>
+                <p><span class="material-symbols-outlined icon-small">calendar_month</span> <strong>FECHA DE REGISTRO:</strong> <span id="leadDetailDate"></span></p>
+                <p><span class="material-symbols-outlined icon-small">push_pin</span> <strong>UBICACIÓN IP / ISP:</strong> <span id="leadDetailTelemetry"></span></p>
+            </div>
+
+            <!-- Internal Notes Section -->
+            <div class="detail-use-cases-box">
+                <h4>📝 NOTAS INTERNAS DE SEGUIMIENTO:</h4>
+                <ul id="leadNotesList" class="crm-notes-list">
+                    <li>Cargando notas...</li>
+                </ul>
+
+                <form id="addNoteForm" class="add-note-form">
+                    <input type="text" id="newNoteInput" placeholder="Escribe un avance o nota interna..." required>
+                    <button type="submit" class="btn-yellow-dash-sm"><span class="material-symbols-outlined">add</span> Agregar Nota</button>
+                </form>
+            </div>
+
+            <button id="deleteLeadBtn" class="btn-delete-session" style="margin-top: 20px;">
+                <span class="material-symbols-outlined">delete</span> Eliminar este Prospecto
+            </button>
+        </div>
+    </div>
+
+    <!-- NEW LEAD MODAL -->
+    <div id="newLeadModal" class="telemetry-modal-overlay">
+        <div class="admin-auth-card crm-new-card">
+            <button id="closeNewLeadModalBtn" class="close-detail-circle">✕</button>
+            <div class="detail-icon-eye">
+                <span class="material-symbols-outlined">person_add</span>
+            </div>
+            <h3 class="auth-title">Agregar Nuevo Prospecto</h3>
+            <p class="auth-sub">Registra un lead manualmente al CRM de Xertica MSP FinOps.</p>
+
+            <form id="newLeadForm">
+                <div class="auth-input-wrapper" style="margin-bottom: 12px;">
+                    <input type="text" id="newLeadName" placeholder="Nombre completo" required>
+                    <span class="material-symbols-outlined pass-icon">person</span>
+                </div>
+
+                <div class="form-row-2">
+                    <div class="auth-input-wrapper">
+                        <input type="text" id="newLeadEmpresa" placeholder="Empresa" required>
+                        <span class="material-symbols-outlined pass-icon">corporate_fare</span>
+                    </div>
+                    <div class="auth-input-wrapper">
+                        <input type="text" id="newLeadCargo" placeholder="Cargo / Rol" required>
+                        <span class="material-symbols-outlined pass-icon">badge</span>
+                    </div>
+                </div>
+
+                <div class="form-row-2" style="margin-top: 12px;">
+                    <div class="auth-input-wrapper">
+                        <input type="email" id="newLeadEmail" placeholder="Email corporativo" required>
+                        <span class="material-symbols-outlined pass-icon">mail</span>
+                    </div>
+                    <div class="auth-input-wrapper">
+                        <input type="tel" id="newLeadPhone" placeholder="Teléfono / WhatsApp" required>
+                        <span class="material-symbols-outlined pass-icon">phone</span>
+                    </div>
+                </div>
+
+                <div class="form-row-2" style="margin-top: 12px;">
+                    <div class="auth-input-wrapper select-input-wrapper">
+                        <select id="newLeadPais" required>
+                            <option value="Colombia 🇨🇴">Colombia 🇨🇴</option>
+                            <option value="México 🇲🇽" selected>México 🇲🇽</option>
+                            <option value="Perú 🇵🇪">Perú 🇵🇪</option>
+                            <option value="Chile 🇨🇱">Chile 🇨🇱</option>
+                            <option value="Ecuador 🇪🇨">Ecuador 🇪🇨</option>
+                            <option value="Argentina 🇦🇷">Argentina 🇦🇷</option>
+                            <option value="Brasil 🇧🇷">Brasil 🇧🇷</option>
+                        </select>
+                    </div>
+
+                    <div class="auth-input-wrapper">
+                        <input type="number" id="newLeadValue" placeholder="Valor Est. ($ USD)" value="15000">
+                        <span class="material-symbols-outlined pass-icon">attach_money</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-yellow-dash full-width" style="justify-content: center; margin-top: 20px;">
+                    <span class="material-symbols-outlined">check_circle</span> Guardar en CRM
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script type="module" src="crm.js"></script>
+</body>
+</html>

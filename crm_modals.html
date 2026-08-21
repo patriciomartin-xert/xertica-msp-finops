@@ -1,0 +1,127 @@
+    <!-- LEAD DETAIL MODAL / DRAWER -->
+    <div id="leadDetailModal" class="telemetry-modal-overlay">
+        <div class="telemetry-detail-card crm-detail-card">
+            <button id="closeLeadDetailBtn" class="close-detail-circle">✕</button>
+            <div class="detail-icon-eye">
+                <span class="material-symbols-outlined">badge</span>
+            </div>
+
+            <h3 id="leadDetailName" class="detail-user-title">Nombre del Prospecto</h3>
+            <p id="leadDetailSub" class="detail-user-email">Cargo @ Empresa</p>
+
+            <!-- Quick Action Contact Buttons -->
+            <div class="lead-action-bar">
+                <a id="leadWhatsAppBtn" href="#" target="_blank" class="btn-action-lead btn-wa">
+                    <span class="material-symbols-outlined">chat</span> WhatsApp
+                </a>
+                <a id="leadEmailBtn" href="#" class="btn-action-lead btn-mail">
+                    <span class="material-symbols-outlined">mail</span> Enviar Correo
+                </a>
+            </div>
+
+            <!-- Stage Selector Box -->
+            <div class="detail-stage-box">
+                <label for="leadDetailStageSelect">Etapa del Embudo Comercial:</label>
+                <select id="leadDetailStageSelect" class="lead-stage-dropdown">
+                    <option value="Nuevos Leads">📥 Nuevos Leads</option>
+                    <option value="En Contacto">📞 En Contacto</option>
+                    <option value="Assessment Agendado">📅 Assessment Agendado</option>
+                    <option value="Propuesta Enviada">📄 Propuesta Enviada</option>
+                    <option value="Ganado / Cierre">🤝 Ganado / Cierre</option>
+                </select>
+            </div>
+
+            <!-- Detail Information -->
+            <div class="detail-info-box">
+                <p><span class="material-symbols-outlined icon-small">corporate_fare</span> <strong>EMPRESA:</strong> <span id="leadDetailEmpresa"></span></p>
+                <p><span class="material-symbols-outlined icon-small">badge</span> <strong>CARGO:</strong> <span id="leadDetailCargo"></span></p>
+                <p><span class="material-symbols-outlined icon-small">public</span> <strong>PAÍS:</strong> <span id="leadDetailPais"></span></p>
+                <p><span class="material-symbols-outlined icon-small">phone</span> <strong>TELÉFONO:</strong> <span id="leadDetailPhone"></span></p>
+                <p><span class="material-symbols-outlined icon-small">mail</span> <strong>EMAIL:</strong> <span id="leadDetailEmail"></span></p>
+                <p><span class="material-symbols-outlined icon-small">attach_money</span> <strong>VALOR ESTIMADO:</strong> <span id="leadDetailValue" class="text-green"></span></p>
+                <p><span class="material-symbols-outlined icon-small">calendar_month</span> <strong>FECHA DE REGISTRO:</strong> <span id="leadDetailDate"></span></p>
+                <p><span class="material-symbols-outlined icon-small">push_pin</span> <strong>UBICACIÓN IP / ISP:</strong> <span id="leadDetailTelemetry"></span></p>
+            </div>
+
+            <!-- Internal Notes Section -->
+            <div class="detail-use-cases-box">
+                <h4>📝 NOTAS INTERNAS DE SEGUIMIENTO:</h4>
+                <ul id="leadNotesList" class="crm-notes-list">
+                    <li>Cargando notas...</li>
+                </ul>
+
+                <form id="addNoteForm" class="add-note-form">
+                    <input type="text" id="newNoteInput" placeholder="Escribe un avance o nota interna..." required>
+                    <button type="submit" class="btn-yellow-dash-sm"><span class="material-symbols-outlined">add</span> Agregar Nota</button>
+                </form>
+            </div>
+
+            <button id="deleteLeadBtn" class="btn-delete-session" style="margin-top: 20px;">
+                <span class="material-symbols-outlined">delete</span> Eliminar este Prospecto
+            </button>
+        </div>
+    </div>
+
+    <!-- NEW LEAD MODAL -->
+    <div id="newLeadModal" class="telemetry-modal-overlay">
+        <div class="admin-auth-card crm-new-card">
+            <button id="closeNewLeadModalBtn" class="close-detail-circle">✕</button>
+            <div class="detail-icon-eye">
+                <span class="material-symbols-outlined">person_add</span>
+            </div>
+            <h3 class="auth-title">Agregar Nuevo Prospecto</h3>
+            <p class="auth-sub">Registra un lead manualmente al CRM de Xertica MSP FinOps.</p>
+
+            <form id="newLeadForm">
+                <div class="auth-input-wrapper" style="margin-bottom: 12px;">
+                    <input type="text" id="newLeadName" placeholder="Nombre completo" required>
+                    <span class="material-symbols-outlined pass-icon">person</span>
+                </div>
+
+                <div class="form-row-2">
+                    <div class="auth-input-wrapper">
+                        <input type="text" id="newLeadEmpresa" placeholder="Empresa" required>
+                        <span class="material-symbols-outlined pass-icon">corporate_fare</span>
+                    </div>
+                    <div class="auth-input-wrapper">
+                        <input type="text" id="newLeadCargo" placeholder="Cargo / Rol" required>
+                        <span class="material-symbols-outlined pass-icon">badge</span>
+                    </div>
+                </div>
+
+                <div class="form-row-2" style="margin-top: 12px;">
+                    <div class="auth-input-wrapper">
+                        <input type="email" id="newLeadEmail" placeholder="Email corporativo" required>
+                        <span class="material-symbols-outlined pass-icon">mail</span>
+                    </div>
+                    <div class="auth-input-wrapper">
+                        <input type="tel" id="newLeadPhone" placeholder="Teléfono / WhatsApp" required>
+                        <span class="material-symbols-outlined pass-icon">phone</span>
+                    </div>
+                </div>
+
+                <div class="form-row-2" style="margin-top: 12px;">
+                    <div class="auth-input-wrapper select-input-wrapper">
+                        <select id="newLeadPais" required>
+                            <option value="Colombia 🇨🇴">Colombia 🇨🇴</option>
+                            <option value="México 🇲🇽" selected>México 🇲🇽</option>
+                            <option value="Perú 🇵🇪">Perú 🇵🇪</option>
+                            <option value="Chile 🇨🇱">Chile 🇨🇱</option>
+                            <option value="Ecuador 🇪🇨">Ecuador 🇪🇨</option>
+                            <option value="Argentina 🇦🇷">Argentina 🇦🇷</option>
+                            <option value="Brasil 🇧🇷">Brasil 🇧🇷</option>
+                        </select>
+                    </div>
+
+                    <div class="auth-input-wrapper">
+                        <input type="number" id="newLeadValue" placeholder="Valor Est. ($ USD)" value="15000">
+                        <span class="material-symbols-outlined pass-icon">attach_money</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-yellow-dash full-width" style="justify-content: center; margin-top: 20px;">
+                    <span class="material-symbols-outlined">check_circle</span> Guardar en CRM
+                </button>
+            </form>
+        </div>
+    </div>

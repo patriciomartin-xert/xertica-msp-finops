@@ -23,14 +23,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const closeNewLeadModalBtn = document.getElementById('closeNewLeadModalBtn');
     const newLeadForm = document.getElementById('newLeadForm');
 
-    const closeCrmBtn = document.getElementById('closeCrmBtn');
-    if (closeCrmBtn) {
-        closeCrmBtn.addEventListener('click', () => {
-            const crmModal = document.getElementById('crmModal');
-            if (crmModal) crmModal.classList.remove('active');
-        });
-    }
-
     const leadDetailModal = document.getElementById('leadDetailModal');
     const closeLeadDetailBtn = document.getElementById('closeLeadDetailBtn');
     const leadDetailStageSelect = document.getElementById('leadDetailStageSelect');
