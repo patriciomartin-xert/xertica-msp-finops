@@ -1195,8 +1195,15 @@ function initTelemetrySystem() {
                 recordLoginAttempt(true, val, 'Patricio Martin', 'patricio.martin@xertica.com');
                 if (authErrorMsg) authErrorMsg.style.display = 'none';
                 authModal.classList.remove('active');
-                teleModal.classList.add('active');
-                renderDashboard();
+                
+                const portalSelectionModal = document.getElementById('adminPortalSelectionModal');
+                if (portalSelectionModal) {
+                    portalSelectionModal.classList.add('active');
+                } else {
+                    // Fallback just in case
+                    teleModal.classList.add('active');
+                    renderDashboard();
+                }
             } else {
                 recordLoginAttempt(false, val, 'Desconocido', 'desconocido@red');
                 if (authErrorMsg) authErrorMsg.style.display = 'block';
@@ -1205,6 +1212,32 @@ function initTelemetrySystem() {
                     setTimeout(() => { passInput.style.borderColor = ''; }, 1500);
                 }
             }
+        });
+    }
+
+    // Portal Selection Logic
+    const portalSelectionModal = document.getElementById('adminPortalSelectionModal');
+    const closePortalSelectionBtn = document.getElementById('closePortalSelectionBtn');
+    const btnGoTelemetry = document.getElementById('btnGoTelemetry');
+    const btnGoCrm = document.getElementById('btnGoCrm');
+
+    if (closePortalSelectionBtn) {
+        closePortalSelectionBtn.addEventListener('click', () => {
+            if (portalSelectionModal) portalSelectionModal.classList.remove('active');
+        });
+    }
+
+    if (btnGoTelemetry) {
+        btnGoTelemetry.addEventListener('click', () => {
+            if (portalSelectionModal) portalSelectionModal.classList.remove('active');
+            teleModal.classList.add('active');
+            renderDashboard();
+        });
+    }
+
+    if (btnGoCrm) {
+        btnGoCrm.addEventListener('click', () => {
+            window.location.href = 'crm.html';
         });
     }
 

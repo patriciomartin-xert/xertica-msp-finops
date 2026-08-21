@@ -278,6 +278,27 @@
         </div>
     </div>
 
+    <!-- Admin Portal Selection Modal -->
+    <div id="adminPortalSelectionModal" class="telemetry-modal-overlay">
+        <div class="admin-auth-card" style="max-width: 500px;">
+            <button id="closePortalSelectionBtn" class="close-detail-circle">✕</button>
+            <div class="detail-icon-eye">
+                <span class="material-symbols-outlined">dashboard_customize</span>
+            </div>
+            <h3 class="auth-title">Portal de Administración</h3>
+            <p class="auth-sub" style="margin-bottom: 24px;">Selecciona a qué módulo deseas ingresar:</p>
+            
+            <div style="display: flex; gap: 16px; flex-direction: column;">
+                <button id="btnGoTelemetry" class="btn-yellow-dash full-width" style="justify-content: center; height: 60px; font-size: 1.1rem;">
+                    <span class="material-symbols-outlined">monitoring</span> Métricas y Telemetría
+                </button>
+                <button id="btnGoCrm" class="btn-yellow-dash full-width" style="justify-content: center; height: 60px; font-size: 1.1rem; background: var(--xe-green); border-color: var(--xe-green); color: #fff; box-shadow: 0 0 15px rgba(46, 139, 90, 0.3);">
+                    <span class="material-symbols-outlined">group</span> CRM y Prospectos
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Telemetry Dashboard Modal -->
     <div id="telemetryModal" class="telemetry-modal-overlay">
         <div class="telemetry-dashboard-card">
