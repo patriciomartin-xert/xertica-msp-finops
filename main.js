@@ -1254,4 +1254,15 @@ function initTelemetrySystem() {
     teleModal.addEventListener('click', (e) => {
         if (e.target === teleModal) teleModal.classList.remove('active');
     });
+
+    // Auto-open logic for cross-navigation from CRM
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('admin') === 'telemetry') {
+        if (lockBtn) {
+            setTimeout(() => {
+                lockBtn.click();
+            }, 300); // slight delay to ensure UI is ready
+        }
+    }
+
 }

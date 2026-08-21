@@ -18,8 +18,17 @@
 <body class="crm-body">
 
     <!-- Top Navigation Header -->
-    <header class="crm-navbar">
-        <div class="crm-nav-container">
+    <header class="crm-navbar" style="flex-direction: column; align-items: stretch; padding: 0;">
+        <!-- Global Admin Nav Tabs -->
+        <div class="admin-global-tabs crm-tabs">
+            <button class="admin-tab" onclick="window.location.href='index.html?admin=telemetry'">
+                <span class="material-symbols-outlined">monitoring</span> Métricas y Telemetría
+            </button>
+            <button class="admin-tab active">
+                <span class="material-symbols-outlined">group</span> CRM y Prospectos
+            </button>
+        </div>
+        <div class="crm-nav-container" style="padding: 16px 40px; width: 100%; box-sizing: border-box;">
             <div class="crm-brand">
                 <a href="index.html">
                     <img src="public/logo-white.png" alt="Xertica Logo" class="crm-logo">

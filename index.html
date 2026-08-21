@@ -289,11 +289,19 @@
             <p class="auth-sub" style="margin-bottom: 24px;">Selecciona a qué módulo deseas ingresar:</p>
             
             <div style="display: flex; gap: 16px; flex-direction: column;">
-                <button id="btnGoTelemetry" class="btn-yellow-dash full-width" style="justify-content: center; height: 60px; font-size: 1.1rem;">
-                    <span class="material-symbols-outlined">monitoring</span> Métricas y Telemetría
+                <button id="btnGoTelemetry" class="portal-select-card telemetry">
+                    <span class="material-symbols-outlined portal-icon">monitoring</span>
+                    <div class="portal-info">
+                        <h4>Métricas y Telemetría</h4>
+                        <p>Analíticas en vivo, logins y comportamiento de usuarios</p>
+                    </div>
                 </button>
-                <button id="btnGoCrm" class="btn-yellow-dash full-width" style="justify-content: center; height: 60px; font-size: 1.1rem; background: var(--xe-green); border-color: var(--xe-green); color: #fff; box-shadow: 0 0 15px rgba(46, 139, 90, 0.3);">
-                    <span class="material-symbols-outlined">group</span> CRM y Prospectos
+                <button id="btnGoCrm" class="portal-select-card crm">
+                    <span class="material-symbols-outlined portal-icon">group</span>
+                    <div class="portal-info">
+                        <h4>CRM y Prospectos</h4>
+                        <p>Pipeline, contactos, gestión de leads y tableros Kanban</p>
+                    </div>
                 </button>
             </div>
         </div>
@@ -302,6 +310,15 @@
     <!-- Telemetry Dashboard Modal -->
     <div id="telemetryModal" class="telemetry-modal-overlay">
         <div class="telemetry-dashboard-card">
+            <!-- Global Admin Nav Tabs -->
+            <div class="admin-global-tabs">
+                <button class="admin-tab active">
+                    <span class="material-symbols-outlined">monitoring</span> Métricas y Telemetría
+                </button>
+                <button class="admin-tab" onclick="window.location.href='crm.html'">
+                    <span class="material-symbols-outlined">group</span> CRM y Prospectos
+                </button>
+            </div>
             <!-- Modal Header -->
             <div class="telemetry-header">
                 <div class="telemetry-title-group">
