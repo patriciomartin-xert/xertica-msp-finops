@@ -1095,6 +1095,36 @@ function initTelemetrySystem() {
     let secs = avgSecs % 60;
     document.getElementById("statAvgTime").textContent = `${mins}m ${secs}s`;
 
+    // Funnel Logic Calculation
+    let countAdvisory = 0;
+    let countFactory = 0;
+    let countSupport = 0;
+
+    sessions.forEach((s) => {
+      const stg = s.stages || [];
+      if (stg.includes("Advisory")) countAdvisory++;
+      if (stg.includes("Factory")) countFactory++;
+      if (stg.includes("Support")) countSupport++;
+    });
+
+    const maxFunnel = Math.max(sessions.length, 1); // Avoid division by zero
+    
+    const countAdvisoryElem = document.getElementById("countAdvisory");
+    const countFactoryElem = document.getElementById("countFactory");
+    const countSupportElem = document.getElementById("countSupport");
+    
+    if (countAdvisoryElem) countAdvisoryElem.textContent = countAdvisory;
+    if (countFactoryElem) countFactoryElem.textContent = countFactory;
+    if (countSupportElem) countSupportElem.textContent = countSupport;
+
+    const barAdvisory = document.getElementById("barAdvisory");
+    const barFactory = document.getElementById("barFactory");
+    const barSupport = document.getElementById("barSupport");
+
+    if (barAdvisory) barAdvisory.style.width = `${(countAdvisory / maxFunnel) * 100}%`;
+    if (barFactory) barFactory.style.width = `${(countFactory / maxFunnel) * 100}%`;
+    if (barSupport) barSupport.style.width = `${(countSupport / maxFunnel) * 100}%`;
+
     tableBody.innerHTML = "";
     sessions.forEach((s, idx) => {
       const tr = document.createElement("tr");
