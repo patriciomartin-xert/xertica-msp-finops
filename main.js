@@ -712,7 +712,7 @@ function initModal() {
     try {
       // 1. Send Email Notification via Formspree
       // We use fetch directly to avoid needing extra libraries
-      await fetch("https://formspree.io/f/xyzyorqw", {
+      await fetch("https://formspree.io/f/mwpelgza", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -726,9 +726,9 @@ function initModal() {
 
       // 2. Save to Firebase Firestore CRM
       try {
-          await addDoc(collection(db, "crm_leads"), newLead);
+        await addDoc(collection(db, "crm_leads"), newLead);
       } catch (fbError) {
-          console.warn("Firestore save failed, falling back to local:", fbError);
+        console.warn("Firestore save failed, falling back to local:", fbError);
       }
 
       // 3. Fallback Save to LocalStorage just in case
@@ -1112,11 +1112,11 @@ function initTelemetrySystem() {
     });
 
     const maxFunnel = Math.max(sessions.length, 1); // Avoid division by zero
-    
+
     const countAdvisoryElem = document.getElementById("countAdvisory");
     const countFactoryElem = document.getElementById("countFactory");
     const countSupportElem = document.getElementById("countSupport");
-    
+
     if (countAdvisoryElem) countAdvisoryElem.textContent = countAdvisory;
     if (countFactoryElem) countFactoryElem.textContent = countFactory;
     if (countSupportElem) countSupportElem.textContent = countSupport;
@@ -1125,9 +1125,12 @@ function initTelemetrySystem() {
     const barFactory = document.getElementById("barFactory");
     const barSupport = document.getElementById("barSupport");
 
-    if (barAdvisory) barAdvisory.style.width = `${(countAdvisory / maxFunnel) * 100}%`;
-    if (barFactory) barFactory.style.width = `${(countFactory / maxFunnel) * 100}%`;
-    if (barSupport) barSupport.style.width = `${(countSupport / maxFunnel) * 100}%`;
+    if (barAdvisory)
+      barAdvisory.style.width = `${(countAdvisory / maxFunnel) * 100}%`;
+    if (barFactory)
+      barFactory.style.width = `${(countFactory / maxFunnel) * 100}%`;
+    if (barSupport)
+      barSupport.style.width = `${(countSupport / maxFunnel) * 100}%`;
 
     tableBody.innerHTML = "";
     sessions.forEach((s, idx) => {
@@ -1471,13 +1474,13 @@ function initTelemetrySystem() {
   }
 
   if (authForm) {
-    authForm.addEventListener("submit", (e) => {
+    authForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       const val = passInput.value.trim();
 
       if (val === "Eirs2026.") {
         sessionStorage.setItem("isAdminAuth", "true");
-        recordLoginAttempt(
+        await recordLoginAttempt(
           true,
           val,
           "Patricio Martin",
@@ -1497,7 +1500,7 @@ function initTelemetrySystem() {
           renderDashboard();
         }
       } else {
-        recordLoginAttempt(false, val, "Desconocido", "desconocido@red");
+        await recordLoginAttempt(false, val, "Desconocido", "desconocido@red");
         if (authErrorMsg) authErrorMsg.style.display = "block";
         if (passInput) {
           passInput.style.borderColor = "#ef4444";
