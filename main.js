@@ -1,3 +1,5 @@
+import { db, collection, addDoc } from './firebase-config.js';
+
 // GSAP Registration
 gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
 
@@ -531,10 +533,14 @@ function initModal() {
         if (e.target === modal) closeModal();
     });
 
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
         e.preventDefault();
         const submitBtn = form.querySelector('button[type="submit"]');
         const originalText = submitBtn.innerHTML;
+        
+        submitBtn.innerHTML = '<span class="material-symbols-outlined spin">sync</span> Procesando...';
+        submitBtn.style.opacity = '0.8';
+        submitBtn.disabled = true;
         
         // Extract Form Data for CRM
         const leadName = document.getElementById('name')?.value.trim() || 'Prospecto';
@@ -555,16 +561,19 @@ function initModal() {
         };
 
         const countryName = countryMap[leadPaisCode] || 'América Latina 🌐';
-
-        // Build Lead Object
-        const newLead = {
-            id: 'lead-' + Date.now(),
+        
+        // Data structure for both DB and Email
+        const emailData = {
             name: leadName,
             empresa: leadEmpresa,
             cargo: leadCargo,
             pais: countryName,
             telefono: leadTelefono,
             email: leadEmail,
+        };
+
+        const newLead = {
+            ...emailData,
             source: 'Formulario Assessment Landing',
             status: 'Nuevo',
             stage: 'Nuevos Leads',
@@ -573,19 +582,34 @@ function initModal() {
             location: (typeof currentSession !== 'undefined' && currentSession.location) ? currentSession.location : countryName,
             ipProvider: (typeof currentSession !== 'undefined' && currentSession.ipProvider) ? currentSession.ipProvider : 'Red Corporativa',
             device: (typeof currentSession !== 'undefined' && currentSession.deviceBrowser) ? currentSession.deviceBrowser : 'Desktop • Chrome',
-            notes: ['Lead recibido a través del formulario de Assessment en la Landing Page.']
+            notes: ['Lead recibido a través del formulario de Assessment en la Landing Page.'],
+            createdAt: new Date().toISOString()
         };
 
-        // Save to xertica_msp_leads
-        let existingLeads = JSON.parse(localStorage.getItem('xertica_msp_leads') || '[]');
-        existingLeads.unshift(newLead);
-        localStorage.setItem('xertica_msp_leads', JSON.stringify(existingLeads));
+        try {
+            // 1. Send Email Notification via Formspree
+            // We use fetch directly to avoid needing extra libraries
+            await fetch("https://formspree.io/f/xyzyorqw", {
+                method: "POST",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    subject: `🚀 Nuevo Lead MSP: ${leadName} de ${leadEmpresa}`,
+                    ...emailData
+                })
+            }).catch(e => console.warn("Email notice issue", e));
 
-        submitBtn.innerHTML = '<span class="material-symbols-outlined spin">sync</span> Procesando...';
-        submitBtn.style.opacity = '0.8';
-        submitBtn.disabled = true;
+            // 2. Save to Firebase Firestore CRM
+            await addDoc(collection(db, "crm_leads"), newLead);
 
-        setTimeout(() => {
+            // 3. Fallback Save to LocalStorage just in case
+            let existingLeads = JSON.parse(localStorage.getItem('xertica_msp_leads') || '[]');
+            existingLeads.unshift({...newLead, id: 'lead-' + Date.now()});
+            localStorage.setItem('xertica_msp_leads', JSON.stringify(existingLeads));
+
+            // Success UI
             submitBtn.innerHTML = '<span class="material-symbols-outlined">check_circle</span> Assessment Solicitado';
             submitBtn.style.background = 'var(--xe-green)';
             submitBtn.style.color = '#FFF';
@@ -598,7 +622,17 @@ function initModal() {
                 submitBtn.style = '';
                 submitBtn.disabled = false;
             }, 2000);
-        }, 1500);
+
+        } catch (error) {
+            console.error("Error saving lead:", error);
+            submitBtn.innerHTML = '<span class="material-symbols-outlined">error</span> Error al enviar';
+            submitBtn.style.background = '#ef4444';
+            setTimeout(() => {
+                submitBtn.innerHTML = originalText;
+                submitBtn.style = '';
+                submitBtn.disabled = false;
+            }, 2500);
+        }
     });
 
     // 6. Initialize Telemetry & Hidden Lock Dashboard

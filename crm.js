@@ -1,8 +1,12 @@
+import { db, collection, getDocs, doc, updateDoc, deleteDoc, query, orderBy } from './firebase-config.js';
 // --- CRM & Prospectos Logic for Xertica MSP FinOps ---
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     // 1. Initial Seed Leads Data (if localStorage is empty)
     initSeedLeads();
+
+    // 2. Fetch real data from Firebase
+    await fetchLeadsFromFirebase();
 
     // 2. DOM Element References
     const crmSearchInput = document.getElementById('crmSearchInput');
@@ -57,8 +61,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (closeNewLeadModalBtn) closeNewLeadModalBtn.addEventListener('click', () => newLeadModal.classList.remove('active'));
 
     if (newLeadForm) {
-        newLeadForm.addEventListener('submit', (e) => {
+        newLeadForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+            
+            const submitBtn = newLeadForm.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<span class="material-symbols-outlined spin">sync</span> Guardando...';
+            submitBtn.disabled = true;
+
             const name = document.getElementById('newLeadName').value.trim();
             const empresa = document.getElementById('newLeadEmpresa').value.trim();
             const cargo = document.getElementById('newLeadCargo').value.trim();
@@ -68,7 +78,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const value = parseFloat(document.getElementById('newLeadValue').value) || 15000;
 
             const newLead = {
-                id: 'lead-' + Date.now(),
                 name,
                 empresa,
                 cargo,
@@ -83,16 +92,30 @@ document.addEventListener('DOMContentLoaded', () => {
                 location: `${pais} 🌐`,
                 ipProvider: 'Registro Interno',
                 device: 'Desktop • CRM Web',
-                notes: ['Lead registrado manualmente desde el portal CRM.']
+                notes: ['Lead registrado manualmente desde el portal CRM.'],
+                createdAt: new Date().toISOString()
             };
 
-            let leads = getLeads();
-            leads.unshift(newLead);
-            saveLeads(leads);
+            try {
+                // We use addDoc to let Firebase generate the ID, we don't save manually first
+                const { collection, addDoc } = await import('./firebase-config.js');
+                const docRef = await addDoc(collection(db, "crm_leads"), newLead);
+                newLead.id = docRef.id;
+                
+                let leads = getLeads();
+                leads.unshift(newLead);
+                await saveLeads(leads, null); // Just save to local storage cache
 
-            newLeadForm.reset();
-            newLeadModal.classList.remove('active');
-            renderCRM();
+                newLeadForm.reset();
+                newLeadModal.classList.remove('active');
+                renderCRM();
+            } catch (error) {
+                console.error("Error saving new lead:", error);
+                alert("Hubo un error guardando el prospecto.");
+            } finally {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
         });
     }
 
@@ -106,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Change Pipeline Stage
     if (leadDetailStageSelect) {
-        leadDetailStageSelect.addEventListener('change', (e) => {
+        leadDetailStageSelect.addEventListener('change', async (e) => {
             if (!currentSelectedLeadId) return;
             const newStage = e.target.value;
             let leads = getLeads();
@@ -114,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (idx >= 0) {
                 leads[idx].stage = newStage;
                 leads[idx].notes.unshift(`Etapa actualizada a "${newStage}" el ${new Date().toLocaleDateString('es-MX')}`);
-                saveLeads(leads);
+                await saveLeads(leads, leads[idx]);
                 renderCRM();
                 openLeadDetail(leads[idx]);
             }
@@ -123,34 +146,54 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Add Internal Note
     if (addNoteForm) {
-        addNoteForm.addEventListener('submit', (e) => {
+        addNoteForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const input = document.getElementById('newNoteInput');
             const text = input.value.trim();
             if (!text || !currentSelectedLeadId) return;
+            
+            const submitBtn = addNoteForm.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
 
             let leads = getLeads();
             const idx = leads.findIndex(l => l.id === currentSelectedLeadId);
             if (idx >= 0) {
                 const timestamp = new Date().toLocaleString('es-MX');
                 leads[idx].notes.unshift(`${text} (${timestamp})`);
-                saveLeads(leads);
+                await saveLeads(leads, leads[idx]);
                 input.value = '';
                 openLeadDetail(leads[idx]);
             }
+            submitBtn.disabled = false;
         });
     }
 
     // Delete Lead
     if (deleteLeadBtn) {
-        deleteLeadBtn.addEventListener('click', () => {
+        deleteLeadBtn.addEventListener('click', async () => {
             if (!currentSelectedLeadId) return;
             if (confirm('¿Estás seguro de que deseas eliminar este prospecto?')) {
-                let leads = getLeads().filter(l => l.id !== currentSelectedLeadId);
-                saveLeads(leads);
+                const idToDelete = currentSelectedLeadId;
+                
+                // Optimistically remove from UI
+                let leads = getLeads().filter(l => l.id !== idToDelete);
+                cachedLeads = leads; // update cache
+                
                 leadDetailModal.classList.remove('active');
                 currentSelectedLeadId = null;
                 renderCRM();
+                
+                // Delete from DB
+                if (!idToDelete.startsWith('lead-seed')) {
+                    try {
+                        const { doc, deleteDoc } = await import('./firebase-config.js');
+                        await deleteDoc(doc(db, "crm_leads", idToDelete));
+                    } catch (e) {
+                        console.error("Error deleting lead:", e);
+                    }
+                }
+                
+                await saveLeads(leads, null); // Update local cache
             }
         });
     }
@@ -163,12 +206,45 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // --- HELPER FUNCTIONS ---
 
-function getLeads() {
-    return JSON.parse(localStorage.getItem('xertica_msp_leads') || '[]');
+let cachedLeads = [];
+
+async function fetchLeadsFromFirebase() {
+    try {
+        const q = query(collection(db, "crm_leads"), orderBy("createdAt", "desc"));
+        const snapshot = await getDocs(q);
+        const leads = [];
+        snapshot.forEach(docSnap => {
+            leads.push({ ...docSnap.data(), id: docSnap.id });
+        });
+        cachedLeads = leads;
+        return leads;
+    } catch (error) {
+        console.error("Error fetching leads from Firebase:", error);
+        // Fallback to local
+        return JSON.parse(localStorage.getItem('xertica_msp_leads') || '[]');
+    }
 }
 
-function saveLeads(leads) {
+function getLeads() {
+    return cachedLeads;
+}
+
+async function saveLeads(leads, updatedLead = null) {
+    // Save to local as backup
     localStorage.setItem('xertica_msp_leads', JSON.stringify(leads));
+    
+    // Save specific lead update to Firebase if provided
+    if (updatedLead && !updatedLead.id.startsWith('lead-seed')) {
+        try {
+            const leadRef = doc(db, "crm_leads", updatedLead.id);
+            // We use updateDoc to only push changes without overwriting the ID logic
+            const leadData = { ...updatedLead };
+            delete leadData.id;
+            await updateDoc(leadRef, leadData);
+        } catch (error) {
+            console.error("Error updating lead in Firebase:", error);
+        }
+    }
 }
 
 function initSeedLeads() {
