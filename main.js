@@ -710,16 +710,16 @@ function initModal() {
     };
 
     try {
-      // 1. Send Email Notification via Formspree
-      // We use fetch directly to avoid needing extra libraries
-      await fetch("https://formspree.io/f/mwpelgza", {
+      // 1. Send Email Notification via Formsubmit.co
+      // The first time this runs, Patricio will receive an activation email to confirm.
+      await fetch("https://formsubmit.co/ajax/patricio.martin@xertica.com", {
         method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          subject: `🚀 Nuevo Lead MSP: ${leadName} de ${leadEmpresa}`,
+          _subject: `🚀 Nuevo Lead MSP: ${leadName} de ${leadEmpresa}`,
           ...emailData,
         }),
       }).catch((e) => console.warn("Email notice issue", e));
