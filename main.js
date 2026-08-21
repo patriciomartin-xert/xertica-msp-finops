@@ -1256,8 +1256,8 @@ function initTelemetrySystem() {
     });
 
     // Auto-open logic for cross-navigation from CRM
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('admin') === 'telemetry') {
+    const adminUrlParams = new URLSearchParams(window.location.search);
+    if (adminUrlParams.get('admin') === 'telemetry') {
         if (lockBtn) {
             setTimeout(() => {
                 lockBtn.click();
