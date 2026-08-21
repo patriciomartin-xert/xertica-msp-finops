@@ -2,6 +2,20 @@
   "name": "xertica-finops",
   "version": "1.0.0",
   "scripts": {
-    "build": "mkdir -p public_html && cp index.html main.js style.css xertica-symbol.png public_html/ && cp -r public public_html/ || true"
-  }
+    "build": "mkdir -p public_html && cp index.html main.js style.css xertica-symbol.png crm.html crm.js firebase-config.js public_html/ && cp -r public public_html/ || true"
+  },
+  "description": "",
+  "main": "main.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/patriciomartin-xert/xertica-msp-finops.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/patriciomartin-xert/xertica-msp-finops/issues"
+  },
+  "homepage": "https://github.com/patriciomartin-xert/xertica-msp-finops#readme"
 }
