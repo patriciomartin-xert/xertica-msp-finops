@@ -410,8 +410,7 @@ function renderTable(leads) {
 
     tbody.innerHTML = leads.map(l => {
         const stageBadgeStyle = getStageStyle(l.stage);
-        const cleanPhone = (l.telefono || '').replace(/[^0-9]/g, '');
-
+        
         return `
             <tr data-id="${l.id}">
                 <td>
@@ -426,15 +425,19 @@ function renderTable(leads) {
                 <td style="font-size: 0.85rem; color: #aaa;">${l.dateStr}</td>
                 <td style="font-weight: 700; color: #4ade80;">$${(l.estimatedValue || 0).toLocaleString()} USD</td>
                 <td>
-                    <span class="live-badge" style="${stageBadgeStyle}">${l.stage}</span>
+                    <select class="stage-select-dropdown" data-id="${l.id}" style="${stageBadgeStyle}; appearance: none; border: none; outline: none; cursor: pointer; border-radius: 20px; padding: 4px 10px; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                        ${['Nuevos Leads', 'En Contacto', 'Assessment Agendado', 'Propuesta Enviada', 'Ganado / Cierre'].map(s => 
+                            `<option value="${s}" ${s === l.stage ? 'selected' : ''} style="color: #000;">${s}</option>`
+                        ).join('')}
+                    </select>
                 </td>
                 <td style="text-align:center;">
-                    <button class="btn-action-icon view-lead-btn" data-id="${l.id}" title="Ver Ficha Completa">
-                        <span class="material-symbols-outlined">visibility</span>
+                    <button class="btn-action-icon delete-lead-btn" data-id="${l.id}" title="Eliminar Prospecto" style="color: #ef4444;">
+                        <span class="material-symbols-outlined">delete_outline</span>
                     </button>
-                    ${cleanPhone ? `
-                    <a href="https://wa.me/${cleanPhone}" target="_blank" class="btn-action-icon text-green" title="WhatsApp Directo">
-                        <span class="material-symbols-outlined">chat</span>
+                    ${l.email ? `
+                    <a href="mailto:${l.email}" class="btn-action-icon text-blue" title="Enviar Correo">
+                        <span class="material-symbols-outlined">mail</span>
                     </a>` : ''}
                 </td>
             </tr>
@@ -442,11 +445,51 @@ function renderTable(leads) {
     }).join('');
 
     // Row / Button Click Listeners
-    tbody.querySelectorAll('.view-lead-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
+    tbody.querySelectorAll('.delete-lead-btn').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
             const id = btn.getAttribute('data-id');
-            const lead = getLeads().find(l => l.id === id);
-            if (lead) openLeadDetail(lead);
+            const confirmDelete = confirm("¿Estás seguro de que deseas eliminar este prospecto permanentemente?");
+            if (confirmDelete) {
+                try {
+                    if (!id.startsWith('lead-seed')) {
+                        const { doc, deleteDoc } = await import('./firebase-config.js');
+                        await deleteDoc(doc(db, "crm_leads", id));
+                    }
+                    // Remove from cached array
+                    const idx = cachedLeads.findIndex(l => l.id === id);
+                    if (idx > -1) {
+                        cachedLeads.splice(idx, 1);
+                        saveLeads(cachedLeads);
+                    }
+                    renderCRM();
+                } catch (err) {
+                    console.error("Error deleting lead:", err);
+                    alert("Error al eliminar el prospecto.");
+                }
+            }
+        });
+    });
+
+    tbody.querySelectorAll('.stage-select-dropdown').forEach(select => {
+        select.addEventListener('change', async (e) => {
+            const id = select.getAttribute('data-id');
+            const newStage = e.target.value;
+            const lead = cachedLeads.find(l => l.id === id);
+            
+            if (lead && lead.stage !== newStage) {
+                lead.stage = newStage;
+                // update in DB
+                if (!id.startsWith('lead-seed')) {
+                    try {
+                        const { doc, updateDoc } = await import('./firebase-config.js');
+                        await updateDoc(doc(db, "crm_leads", id), { stage: newStage });
+                    } catch (err) {
+                        console.error("Error updating stage:", err);
+                    }
+                }
+                saveLeads(cachedLeads); // save to local storage
+                renderCRM(); // Re-render to update styling and kanban
+            }
         });
     });
 }

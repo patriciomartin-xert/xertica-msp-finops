@@ -1497,7 +1497,7 @@ function initTelemetrySystem() {
         } else {
           // Fallback just in case
           teleModal.classList.add("active");
-          renderDashboard();
+          syncTelemetryFromFirebase();
         }
       } else {
         await recordLoginAttempt(false, val, "Desconocido", "desconocido@red");
@@ -1510,6 +1510,28 @@ function initTelemetrySystem() {
         }
       }
     });
+  }
+
+  async function syncTelemetryFromFirebase() {
+    try {
+      const { collection, getDocs } = await import("./firebase-config.js");
+      const querySnapshot = await getDocs(collection(db, "telemetry_sessions"));
+      const sessions = [];
+      querySnapshot.forEach((doc) => {
+        sessions.push(doc.data());
+      });
+      // Sort by updatedAt descending
+      sessions.sort(
+        (a, b) => new Date(b.updatedAt || 0) - new Date(a.updatedAt || 0),
+      );
+      localStorage.setItem(
+        "xertica_telemetry_sessions",
+        JSON.stringify(sessions),
+      );
+      renderDashboard();
+    } catch (error) {
+      console.error("Error fetching telemetry from Firebase:", error);
+    }
   }
 
   // Portal Selection Logic
@@ -1532,7 +1554,7 @@ function initTelemetrySystem() {
     btnGoTelemetry.addEventListener("click", () => {
       if (portalSelectionModal) portalSelectionModal.classList.remove("active");
       teleModal.classList.add("active");
-      renderDashboard();
+      syncTelemetryFromFirebase();
     });
   }
 
@@ -1555,7 +1577,7 @@ function initTelemetrySystem() {
     closeTeleBtn.addEventListener("click", () =>
       teleModal.classList.remove("active"),
     );
-  if (refreshBtn) refreshBtn.addEventListener("click", renderDashboard);
+  if (refreshBtn) refreshBtn.addEventListener("click", syncTelemetryFromFirebase);
 
   teleModal.addEventListener("click", (e) => {
     if (e.target === teleModal) teleModal.classList.remove("active");
@@ -1566,7 +1588,7 @@ function initTelemetrySystem() {
   if (adminUrlParams.get("admin") === "telemetry") {
     if (sessionStorage.getItem("isAdminAuth") === "true") {
       teleModal.classList.add("active");
-      renderDashboard();
+      syncTelemetryFromFirebase();
 
       // Clean up the URL so it doesn't stay there forever
       window.history.replaceState({}, document.title, window.location.pathname);
