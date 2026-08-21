@@ -725,7 +725,11 @@ function initModal() {
       }).catch((e) => console.warn("Email notice issue", e));
 
       // 2. Save to Firebase Firestore CRM
-      await addDoc(collection(db, "crm_leads"), newLead);
+      try {
+          await addDoc(collection(db, "crm_leads"), newLead);
+      } catch (fbError) {
+          console.warn("Firestore save failed, falling back to local:", fbError);
+      }
 
       // 3. Fallback Save to LocalStorage just in case
       let existingLeads = JSON.parse(

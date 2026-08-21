@@ -107,8 +107,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             try {
                 // We use addDoc to let Firebase generate the ID, we don't save manually first
                 const { collection, addDoc } = await import('./firebase-config.js');
-                const docRef = await addDoc(collection(db, "crm_leads"), newLead);
-                newLead.id = docRef.id;
+                try {
+                    const docRef = await addDoc(collection(db, "crm_leads"), newLead);
+                    newLead.id = docRef.id;
+                } catch (fbError) {
+                    console.warn("Firestore save failed in CRM, using local fallback:", fbError);
+                    newLead.id = 'lead-local-' + Date.now();
+                }
                 
                 let leads = getLeads();
                 leads.unshift(newLead);
@@ -119,7 +124,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 renderCRM();
             } catch (error) {
                 console.error("Error saving new lead:", error);
-                alert("Hubo un error guardando el prospecto.");
+                alert("Hubo un error crítico guardando el prospecto.");
             } finally {
                 submitBtn.innerHTML = originalText;
                 submitBtn.disabled = false;
