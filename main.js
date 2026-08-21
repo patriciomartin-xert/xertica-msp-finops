@@ -1192,6 +1192,7 @@ function initTelemetrySystem() {
             const val = passInput.value.trim();
 
             if (val === 'Eirs2026.') {
+                sessionStorage.setItem('isAdminAuth', 'true');
                 recordLoginAttempt(true, val, 'Patricio Martin', 'patricio.martin@xertica.com');
                 if (authErrorMsg) authErrorMsg.style.display = 'none';
                 authModal.classList.remove('active');
@@ -1258,11 +1259,12 @@ function initTelemetrySystem() {
     // Auto-open logic for cross-navigation from CRM
     const adminUrlParams = new URLSearchParams(window.location.search);
     if (adminUrlParams.get('admin') === 'telemetry') {
-        if (lockBtn) {
-            setTimeout(() => {
-                lockBtn.click();
-            }, 300); // slight delay to ensure UI is ready
+        if (sessionStorage.getItem('isAdminAuth') === 'true') {
+            teleModal.classList.add('active');
+            renderDashboard();
+            
+            // Clean up the URL so it doesn't stay there forever
+            window.history.replaceState({}, document.title, window.location.pathname);
         }
     }
-
 }
