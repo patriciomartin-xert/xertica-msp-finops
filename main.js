@@ -1077,7 +1077,7 @@ function initTelemetrySystem() {
             userName: 'Patricio Martin',
             userEmail: 'patricio.martin@xertica.com',
             status: 'Éxito',
-            keyTyped: 'Eirs2026.',
+            keyTyped: 'Eir2026.',
             location: 'Mexico City, Mexico 🇲🇽',
             ipProvider: 'Xertica Cloud Inc.',
             device: 'Desktop • Chrome (Linux / ChromeOS)'
@@ -1097,7 +1097,7 @@ function initTelemetrySystem() {
             userName: uName || 'Patricio Martin',
             userEmail: uEmail || 'patricio.martin@xertica.com',
             status: success ? 'Éxito' : 'Intento Fallido',
-            keyTyped: keyEntered ? (success ? 'Eirs2026.' : '••••••••') : '(vacío)',
+            keyTyped: keyEntered ? (success ? 'Eir2026.' : '••••••••') : '(vacío)',
             location: currentSession.location || 'Mexico City, Mexico 🇲🇽',
             ipProvider: currentSession.ipProvider || 'Desconocido / ISP Privado',
             device: currentSession.deviceBrowser || 'Desktop • Chrome'
@@ -1191,7 +1191,7 @@ function initTelemetrySystem() {
             e.preventDefault();
             const val = passInput.value.trim();
 
-            if (val === 'Eirs2026.') {
+            if (val === 'Eir2026.') {
                 recordLoginAttempt(true, val, 'Patricio Martin', 'patricio.martin@xertica.com');
                 if (authErrorMsg) authErrorMsg.style.display = 'none';
                 authModal.classList.remove('active');
